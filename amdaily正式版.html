@@ -1,0 +1,2279 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM每日任務循環與AMC每月挑戰</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        panda: {
+                            DEFAULT: '#D70F64',
+                            light: '#FF2B85',
+                            soft: '#FFF0F6',
+                            pastel: '#FFD6E7',
+                            dark: '#9E0B49',
+                            charcoal: '#2D2A32'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        display: ['"Fredoka"', '"Noto Sans TC"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFF0F6;
+            background-image: 
+                radial-gradient(#FFD6E7 1.5px, transparent 1.5px), 
+                radial-gradient(#FFE5F0 1.5px, #FFF0F6 1.5px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            color: #2D2A32;
+            overflow-x: hidden;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-7px) rotate(1.5deg); }
+        }
+        @keyframes angelHover {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-12px) scale(1.02); }
+        }
+        @keyframes wingFlapLeft {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-18deg) scaleX(0.9); }
+        }
+        @keyframes wingFlapRight {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(18deg) scaleX(0.9); }
+        }
+        @keyframes haloPulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.12); opacity: 1; filter: drop-shadow(0 0 14px #FBBF24); }
+        }
+        @keyframes scooterDrive {
+            0% { transform: translateX(-120px) translateY(0px); }
+            25% { transform: translateX(20px) translateY(-3px); }
+            50% { transform: translateX(180px) translateY(2px); }
+            75% { transform: translateX(340px) translateY(-2px); }
+            100% { transform: translateX(540px) translateY(0px); }
+        }
+        @keyframes picnicBob {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(-2deg); }
+        }
+        @keyframes popScale {
+            0% { transform: scale(0.9); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes shine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .pau-float { animation: floatSlow 3.2s ease-in-out infinite; }
+        .pau-cheer { animation: popScale 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .picnic-bounce { animation: picnicBob 2.5s ease-in-out infinite; }
+        .scooter-animation { animation: scooterDrive 4s linear infinite; }
+        .angel-float { animation: angelHover 3s ease-in-out infinite; }
+        .halo-glow { animation: haloPulse 2s ease-in-out infinite; }
+        .wing-left { transform-origin: 90px 140px; animation: wingFlapLeft 1.4s ease-in-out infinite; }
+        .wing-right { transform-origin: 170px 140px; animation: wingFlapRight 1.4s ease-in-out infinite; }
+
+        .shimmer-btn {
+            background: linear-gradient(90deg, #D70F64 0%, #FF2B85 45%, #FF85B3 50%, #FF2B85 55%, #D70F64 100%);
+            background-size: 200% auto;
+            animation: shine 4s linear infinite;
+        }
+        .gold-shimmer {
+            background: linear-gradient(90deg, #F59E0B 0%, #FBBF24 45%, #FEF08A 50%, #FBBF24 55%, #F59E0B 100%);
+            background-size: 200% auto;
+            animation: shine 4s linear infinite;
+        }
+        .celestial-shimmer {
+            background: linear-gradient(90deg, #6366F1 0%, #EC4899 45%, #FDE047 50%, #EC4899 55%, #6366F1 100%);
+            background-size: 200% auto;
+            animation: shine 3.5s linear infinite;
+        }
+
+        .ticket-card {
+            position: relative;
+            background: radial-gradient(circle at 0 50%, transparent 14px, #ffffff 15px),
+                        radial-gradient(circle at 100% 50%, transparent 14px, #ffffff 15px);
+            background-position: 0 0, 100% 0;
+            background-size: 51% 100%;
+            background-repeat: no-repeat;
+        }
+
+        .stamp-badge {
+            border: 3px double #D70F64;
+            color: #D70F64;
+            transform: rotate(-10deg);
+        }
+
+        @keyframes waveHand3D {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(8deg); }
+        }
+        .pau-wave-arm {
+            transform-origin: 96px 164px;
+            animation: waveHand3D 2.4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-20 selection:bg-panda selection:text-white">
+
+    <!-- SHARED 3D PLUSH PAU-PAU SVG DEFS -->
+    <svg width="0" height="0" class="absolute pointer-events-none" aria-hidden="true">
+        <defs>
+            <radialGradient id="pauHeadGrad" cx="46%" cy="38%" r="58%" fx="42%" fy="32%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="58%" stop-color="#F7F8FA"/>
+                <stop offset="84%" stop-color="#E5E7EC"/>
+                <stop offset="100%" stop-color="#CFD3DC"/>
+            </radialGradient>
+            <radialGradient id="pauBellyGrad" cx="48%" cy="40%" r="58%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="65%" stop-color="#F2F4F7"/>
+                <stop offset="100%" stop-color="#D8DCE5"/>
+            </radialGradient>
+            <radialGradient id="pauPinkGrad" cx="42%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#E61772"/>
+                <stop offset="55%" stop-color="#D00B5C"/>
+                <stop offset="100%" stop-color="#9A0442"/>
+            </radialGradient>
+            <linearGradient id="pauLegGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#D00B5C"/>
+                <stop offset="60%" stop-color="#B5074E"/>
+                <stop offset="100%" stop-color="#870339"/>
+            </linearGradient>
+            <radialGradient id="pauPatchGrad" cx="50%" cy="45%" r="55%">
+                <stop offset="0%" stop-color="#DC1266"/>
+                <stop offset="75%" stop-color="#C80958"/>
+                <stop offset="100%" stop-color="#A60547"/>
+            </radialGradient>
+            <radialGradient id="pauEyeBall" cx="38%" cy="35%" r="60%">
+                <stop offset="0%" stop-color="#3A3236"/>
+                <stop offset="45%" stop-color="#161013"/>
+                <stop offset="100%" stop-color="#050304"/>
+            </radialGradient>
+            <filter id="floorShadowBlur" x="-25%" y="-35%" width="150%" height="170%">
+                <feGaussianBlur stdDeviation="4.5"/>
+            </filter>
+            <filter id="footContactBlur" x="-30%" y="-40%" width="160%" height="180%">
+                <feGaussianBlur stdDeviation="2.5"/>
+            </filter>
+            <filter id="headDropShadow" x="-15%" y="-10%" width="130%" height="130%">
+                <feDropShadow dx="0" dy="5" stdDeviation="3.5" flood-color="#5A0326" flood-opacity="0.32"/>
+            </filter>
+
+            <g id="PauPau3DFigure">
+                <g filter="url(#floorShadowBlur)" opacity="0.82">
+                    <ellipse cx="136" cy="257" rx="82" ry="12.5" fill="#F782B2"/>
+                    <ellipse cx="76" cy="253" rx="34" ry="9" fill="#F782B2"/>
+                    <ellipse cx="44" cy="259" rx="13" ry="3.8" fill="#F782B2"/>
+                    <ellipse cx="83" cy="242" rx="11" ry="3.2" fill="#F782B2"/>
+                </g>
+                <ellipse cx="130" cy="256" rx="28" ry="4.2" fill="#3D091E" opacity="0.45" filter="url(#footContactBlur)"/>
+
+                <path d="M102 206 L104 249 Q104.5 256 113 256 L122 256 Q128.5 256 128.5 249 L128.5 212 Z" fill="url(#pauLegGrad)"/>
+                <path d="M131.5 212 L131.5 249 Q131.5 256 138 256 L147 256 Q155.5 256 156 249 L158 206 Z" fill="url(#pauLegGrad)"/>
+
+                <path d="M158 145 C172 152 177 174 176 202 C175.5 214 169 221 164 218 C160 216 159 208 159 200 C159 184 156 168 152 158 Z" fill="url(#pauPinkGrad)"/>
+                <ellipse cx="165" cy="211" rx="6.5" ry="8.5" fill="url(#pauLegGrad)"/>
+
+                <g class="pau-wave-arm">
+                    <path d="M104 146 C86 146 72 145 62 135 C54 127 50 119 56 114 C64 110 73 122 80 128 C88 133 96 134 105 135 Z" fill="url(#pauPinkGrad)"/>
+                    <ellipse cx="59" cy="127" rx="13.5" ry="12" transform="rotate(-28 59 127)" fill="url(#pauPinkGrad)"/>
+                    <circle cx="48.5" cy="121.5" r="5.5" fill="#D50C5F"/>
+                    <circle cx="54.5" cy="115.5" r="6" fill="#DC1165"/>
+                    <circle cx="63.5" cy="116" r="5.6" fill="#D50C5F"/>
+                    <ellipse cx="59.5" cy="126.5" rx="4.6" ry="5.4" transform="rotate(-18 59.5 126.5)" fill="#EAECEF"/>
+                </g>
+
+                <path d="M98 144 C96 135 164 135 162 144 L161 211 C161 220 99 220 99 211 Z" fill="url(#pauPinkGrad)"/>
+                <path d="M101 182 C101 159 159 159 159 182 L158 206 C158 216 102 216 102 206 Z" fill="url(#pauBellyGrad)"/>
+
+                <g filter="url(#headDropShadow)">
+                    <circle cx="75" cy="54" r="26" fill="url(#pauPinkGrad)"/>
+                    <path d="M 161 36 C 172 24, 193 25, 203 38 C 206 41, 206 43, 200 46 C 205 47, 210 50, 211 56 C 212 71, 197 83, 181 80 Z" fill="url(#pauPinkGrad)"/>
+                    <ellipse cx="130" cy="96" rx="74" ry="63" fill="url(#pauHeadGrad)"/>
+                </g>
+
+                <ellipse cx="99" cy="89" rx="22.5" ry="18.5" transform="rotate(-22 99 89)" fill="url(#pauPatchGrad)"/>
+                <ellipse cx="161" cy="89" rx="22.5" ry="18.5" transform="rotate(22 161 89)" fill="url(#pauPatchGrad)"/>
+                <circle cx="104" cy="86" r="8.8" fill="url(#pauEyeBall)"/>
+                <circle cx="101.2" cy="83.2" r="2.7" fill="#FFFFFF"/>
+                <circle cx="156" cy="86" r="8.8" fill="url(#pauEyeBall)"/>
+                <circle cx="153.2" cy="83.2" r="2.7" fill="#FFFFFF"/>
+
+                <ellipse cx="130" cy="103" rx="18" ry="13" fill="#FFFFFF" opacity="0.55"/>
+                <ellipse cx="130" cy="98.5" rx="6.2" ry="4.3" fill="#151113"/>
+                <ellipse cx="128.5" cy="97.2" rx="2.4" ry="1" fill="#FFFFFF" opacity="0.75"/>
+                <path d="M 117.5 109.5 Q 130 108.5 142.5 109.5 C 142.5 125 136.5 131 130 131 C 123.5 131 117.5 125 117.5 109.5 Z" fill="#1A0E14"/>
+                <path d="M 122 121.5 C 124 117.5 128 118 130 120 C 132 118 136 117.5 138 121.5 C 139 126.5 135 129.5 130 129.5 C 125 129.5 121 126.5 122 121.5 Z" fill="#C81058"/>
+            </g>
+
+            <g id="AngelWing">
+                <path d="M 0 0 C -40 -30, -90 -30, -110 10 C -120 30, -110 60, -90 80 C -80 70, -75 50, -60 40 C -70 60, -60 90, -40 100 C -35 80, -25 60, -10 50 C -15 75, 5 95, 20 90 C 10 70, 5 40, 0 0 Z" 
+                      fill="url(#angelWingGrad)" filter="drop-shadow(0 4px 8px rgba(253, 224, 71, 0.4))"/>
+            </g>
+            <linearGradient id="angelWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="70%" stop-color="#FFFBEB"/>
+                <stop offset="100%" stop-color="#FDE68A"/>
+            </linearGradient>
+
+            <g id="FoodpandaBrandLogo">
+                <rect x="0" y="0" width="28" height="28" rx="7" fill="#E21B70"/>
+                <circle cx="7.5" cy="7.5" r="3" fill="#FFFFFF"/>
+                <circle cx="20.5" cy="7.5" r="3" fill="#FFFFFF"/>
+                <circle cx="14" cy="15" r="8.5" fill="#FFFFFF"/>
+                <ellipse cx="11" cy="14" rx="2.3" ry="1.8" transform="rotate(-20 11 14)" fill="#E21B70"/>
+                <ellipse cx="17" cy="14" rx="2.3" ry="1.8" transform="rotate(20 17 14)" fill="#E21B70"/>
+                <ellipse cx="14" cy="16.2" rx="1.3" ry="0.9" fill="#E21B70"/>
+                <path d="M12.2 18 Q14 19.8 15.8 18" stroke="#E21B70" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+            </g>
+        </defs>
+    </svg>
+
+    <!-- 1. ENTRY GATEKEEPER MODAL -->
+    <div id="gatekeeperModal" class="fixed inset-0 z-50 flex items-center justify-center bg-panda-charcoal/85 backdrop-blur-md p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border-4 border-panda-pastel text-center relative overflow-hidden">
+            <div class="w-36 h-36 mx-auto mb-2 pau-float">
+                <svg viewBox="0 0 260 275" class="w-full h-full">
+                    <use href="#PauPau3DFigure"/>
+                </svg>
+            </div>
+
+            <span class="inline-block px-3 py-1 rounded-full bg-panda-soft text-panda font-black text-xs mb-1.5">
+                🐼 FOODPANDA AM 專屬任務系統
+            </span>
+            <h2 class="text-2xl font-black text-panda-charcoal mb-1">AM 每日任務循環</h2>
+            <p class="text-xs text-gray-500 mb-5 leading-relaxed">
+                嗨！我是 Pau-Pau 胖胖達！請輸入你的姓名與通行碼開始今日挑戰🐾
+            </p>
+
+            <form id="gatekeeperForm" class="space-y-3.5 text-left">
+                <div>
+                    <label class="block text-xs font-black text-panda-charcoal mb-1">你的名字 / 暱稱</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user absolute left-4 top-3.5 text-panda"></i>
+                        <input 
+                            type="text" 
+                            id="gateUserName" 
+                            maxlength="20"
+                            placeholder="例如：小熊 (北區 AM)" 
+                            required
+                            class="w-full pl-11 pr-4 py-3 rounded-2xl border-2 border-panda-pastel focus:border-panda focus:ring-4 focus:ring-panda/15 outline-none text-sm font-bold text-panda-charcoal bg-panda-soft/40"
+                        >
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-xs font-black text-panda-charcoal">通行密碼 (Passcode)</label>
+                        <span class="text-[11px] text-gray-400 font-bold">提示：4位數字</span>
+                    </div>
+                    <div class="relative">
+                        <i class="fa-solid fa-key absolute left-4 top-3.5 text-panda"></i>
+                        <input 
+                            type="password" 
+                            id="gatePasscode" 
+                            placeholder="請輸入通行密碼" 
+                            required
+                            class="w-full pl-11 pr-4 py-3 rounded-2xl border-2 border-panda-pastel focus:border-panda focus:ring-4 focus:ring-panda/15 outline-none text-sm font-mono font-black text-panda-charcoal bg-panda-soft/40 tracking-wider"
+                        >
+                    </div>
+                    <p id="gateErrorText" class="hidden text-xs font-bold text-rose-500 mt-1.5 flex items-center gap-1">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>密碼錯誤</span>
+                    </p>
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="w-full mt-2 py-3.5 rounded-2xl shimmer-btn text-white font-black text-sm shadow-lg shadow-panda/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                    <span>解鎖進入任務系統！</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. TICKET & CELEBRATION MODALS -->
+    <!-- 2A. Standard Ticket Modal -->
+    <div id="voucherModal" class="fixed inset-0 z-50 flex items-center justify-center bg-panda-charcoal/75 backdrop-blur-sm p-4 hidden">
+        <div class="max-w-md w-full animate-[popScale_0.35s_ease-out]">
+            <div class="ticket-card rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-panda-pastel relative overflow-hidden bg-white">
+                <div class="flex justify-between items-center border-b-2 border-dashed border-pink-200 pb-4 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-xl bg-panda text-white flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-paw"></i>
+                        </span>
+                        <div>
+                            <p class="text-[10px] font-bold text-panda tracking-wider uppercase">PAU-PAU OFFICIAL PASS</p>
+                            <p id="voucherModalSubtitle" class="text-xs text-gray-400 font-medium">光榮任務達成憑證</p>
+                        </div>
+                    </div>
+                    <span id="voucherModalTag" class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700 font-black text-xs">
+                        VIP 專屬
+                    </span>
+                </div>
+
+                <div class="text-center py-2 relative">
+                    <div id="voucherIconBox" class="w-20 h-20 mx-auto mb-3 rounded-full bg-panda-soft flex items-center justify-center text-4xl shadow-inner">
+                        🎟️
+                    </div>
+                    <h3 id="voucherModalTitle" class="text-2xl font-black text-panda mb-1.5">心安理得準時下班券</h3>
+                    <p id="voucherModalDesc" class="text-xs text-gray-600 mb-4 leading-relaxed">
+                        今日任務已完成且達 60 points！Pau-Pau 認證你可以準時下班啦！
+                    </p>
+
+                    <div class="bg-panda-soft/70 rounded-2xl p-4 text-left grid grid-cols-2 gap-2.5 border border-panda-pastel mb-5 relative text-xs">
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold">持券人</p>
+                            <p id="voucherHolderName" class="font-black text-panda-charcoal truncate">小熊夥伴</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold">簽發時間</p>
+                            <p id="voucherIssueDate" class="font-black text-panda-charcoal">2026/11/05 16:30</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold">達成條件</p>
+                            <p id="voucherCostInfo" class="font-black text-panda">60 Points 兌換</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold">認證序號</p>
+                            <p id="voucherSerial" class="font-mono font-bold text-gray-600">#OFF-8888</p>
+                        </div>
+                        <div id="voucherStampBadge" class="stamp-badge absolute -right-2 -bottom-2 px-2 py-0.5 rounded-lg font-black text-xs uppercase bg-white/95">
+                            🐾 胖胖達核准準時下班
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button 
+                        id="voucherActionBtn" 
+                        class="py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-1.5"
+                    >
+                        <i class="fa-solid fa-play"></i>
+                        <span id="voucherActionBtnText">立即使用票券！</span>
+                    </button>
+                    <button 
+                        onclick="closeVoucherModal()" 
+                        class="py-3.5 rounded-2xl bg-panda-soft hover:bg-panda-pastel text-panda font-black text-xs sm:text-sm transition-all"
+                    >
+                        收下稍後使用
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2B. ANIMATION MODAL: Pau-Pau 騎機車下班 -->
+    <div id="scooterModal" class="fixed inset-0 z-50 flex items-center justify-center bg-panda-charcoal/85 backdrop-blur-md p-4 hidden">
+        <div class="bg-gradient-to-b from-sky-400 via-pink-100 to-amber-50 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border-4 border-white text-center relative overflow-hidden">
+            <span class="inline-block px-3 py-1 rounded-full bg-white/80 backdrop-blur-sm text-panda font-black text-xs mb-2">
+                💨 心安理得 · 準時下班打卡成功！
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-black text-panda-charcoal mb-1">
+                掰掰大家！Pau-Pau 騎車準時下班囉！🛵💨
+            </h2>
+            <p class="text-xs text-gray-600 mb-6 font-medium">
+                持券人：<span id="scooterHolderName" class="font-black text-panda">小熊夥伴</span>｜打卡全滿，幸福回家～
+            </p>
+
+            <div class="w-full h-44 bg-slate-800 rounded-2xl relative overflow-hidden shadow-inner border-2 border-slate-700 flex items-center">
+                <div class="absolute bottom-6 w-full flex justify-between px-2 gap-4">
+                    <span class="h-1.5 w-12 bg-amber-300 rounded"></span>
+                    <span class="h-1.5 w-12 bg-amber-300 rounded"></span>
+                    <span class="h-1.5 w-12 bg-amber-300 rounded"></span>
+                    <span class="h-1.5 w-12 bg-amber-300 rounded"></span>
+                    <span class="h-1.5 w-12 bg-amber-300 rounded"></span>
+                </div>
+
+                <div class="scooter-animation absolute left-0 bottom-4 w-44 h-36">
+                    <svg viewBox="0 0 240 190" class="w-full h-full drop-shadow-xl">
+                        <circle cx="20" cy="148" r="5" fill="#FFFFFF" opacity="0.6"/>
+                        <circle cx="10" cy="144" r="7" fill="#FFFFFF" opacity="0.4"/>
+                        <rect x="34" y="96" width="38" height="34" rx="5" fill="#D70F64" stroke="#FFFFFF" stroke-width="1.5"/>
+                        <circle cx="53" cy="113" r="8" fill="#FFFFFF"/>
+                        <ellipse cx="50.5" cy="112" rx="2" ry="1.5" fill="#D70F64"/>
+                        <ellipse cx="55.5" cy="112" rx="2" ry="1.5" fill="#D70F64"/>
+                        <g transform="translate(56, -4) scale(0.58)">
+                            <use href="#PauPau3DFigure"/>
+                            <path d="M 65 58 Q 130 42 195 58" stroke="#FF2B85" stroke-width="8" stroke-linecap="round" fill="none"/>
+                            <ellipse cx="130" cy="48" rx="28" ry="8" fill="#38BDF8" opacity="0.85"/>
+                        </g>
+                        <circle cx="54" cy="152" r="20" fill="#2D2A32"/>
+                        <circle cx="54" cy="152" r="11" fill="#E5E7EB"/>
+                        <circle cx="182" cy="152" r="20" fill="#2D2A32"/>
+                        <circle cx="182" cy="152" r="11" fill="#E5E7EB"/>
+                        <path d="M50 152 L106 152 L136 122 L172 122 L182 152 Z" fill="#D70F64"/>
+                        <rect x="82" y="126" width="54" height="16" rx="6" fill="#181516"/>
+                        <path d="M166 122 L156 82 L170 78" stroke="#9E0B49" stroke-width="6" stroke-linecap="round" fill="none"/>
+                        <circle cx="174" cy="82" r="6.5" fill="#FEF08A"/>
+                    </svg>
+                </div>
+            </div>
+
+            <button 
+                onclick="closeScooterModal()" 
+                class="mt-5 w-full py-3.5 rounded-2xl shimmer-btn text-white font-black text-sm shadow-lg shadow-panda/30"
+            >
+                太棒了！關閉畫面好好放鬆 ✨
+            </button>
+        </div>
+    </div>
+
+    <!-- 2C. ANIMATION MODAL: Pau-Pau 週末草地野餐 -->
+    <div id="picnicModal" class="fixed inset-0 z-50 flex items-center justify-center bg-panda-charcoal/85 backdrop-blur-md p-4 hidden">
+        <div class="bg-gradient-to-b from-amber-100 via-rose-50 to-emerald-50 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border-4 border-amber-300 text-center relative overflow-hidden">
+            <span class="inline-block px-3 py-1 rounded-full bg-amber-200 text-amber-900 font-black text-xs mb-2">
+                🏖️ 五星達標 · 週末愉快休假！
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-black text-panda-charcoal mb-1">
+                Pau-Pau 正在享受週末大自然郊遊野餐！🥪🌸
+            </h2>
+            <p class="text-xs text-gray-600 mb-5 font-medium">
+                本週 5 顆星榮耀滿分！關掉工作訊息，享受好天氣吧～
+            </p>
+
+            <div class="w-full h-52 bg-gradient-to-b from-sky-200 via-emerald-100 to-emerald-400 rounded-2xl relative overflow-hidden shadow-inner border-2 border-emerald-300 flex items-center justify-center">
+                <div class="absolute bottom-4 w-72 h-20 bg-rose-500 rounded-2xl transform rotate-1 border-2 border-white/60 shadow-md flex items-center justify-around opacity-95">
+                    <span class="text-3xl">🧺</span>
+                    <span class="text-2xl">🥪</span>
+                    <span class="text-2xl">🧃</span>
+                    <span class="text-3xl">🍉</span>
+                </div>
+                <div class="picnic-bounce relative z-10 w-44 h-44 mb-3">
+                    <svg viewBox="0 0 260 275" class="w-full h-full drop-shadow-xl">
+                        <use href="#PauPau3DFigure"/>
+                        <ellipse cx="130" cy="34" rx="48" ry="12" fill="#FDE047" stroke="#CA8A04" stroke-width="1.5"/>
+                        <path d="M100 32 C100 14, 160 14, 160 32 Z" fill="#FACC15" stroke="#CA8A04" stroke-width="1"/>
+                        <path d="M101 30 Q130 36 159 30" stroke="#D70F64" stroke-width="4" fill="none"/>
+                        <rect x="95" y="148" width="6.5" height="36" rx="3" fill="#10B981"/>
+                        <rect x="158.5" y="148" width="6.5" height="36" rx="3" fill="#10B981"/>
+                    </svg>
+                </div>
+            </div>
+
+            <button 
+                onclick="closePicnicModal()" 
+                class="mt-4 w-full py-3.5 rounded-2xl gold-shimmer text-amber-950 font-black text-sm shadow-lg shadow-amber-400/30"
+            >
+                祝我有個超棒的週末假期！☀️
+            </button>
+        </div>
+    </div>
+
+    <!-- 2D. ANIMATION MODAL: 天使 Pau-Pau -->
+    <div id="angelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-panda-charcoal/90 backdrop-blur-md p-4 hidden">
+        <div class="bg-gradient-to-b from-indigo-900 via-purple-900 to-pink-900 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border-4 border-amber-300 text-center relative overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none opacity-40">
+                <span class="absolute top-6 left-8 text-amber-300 text-xl animate-ping">✨</span>
+                <span class="absolute top-12 right-12 text-yellow-200 text-lg animate-pulse">⭐</span>
+                <span class="absolute bottom-14 left-12 text-pink-300 text-2xl animate-pulse">✨</span>
+                <span class="absolute bottom-20 right-10 text-amber-300 text-xl animate-ping">💫</span>
+            </div>
+
+            <span class="inline-block px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-300 to-yellow-200 text-amber-950 font-black text-xs mb-2 shadow-md">
+                🎓 AMC 三冠王 · 天使 PAU-PAU 降臨
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-black text-yellow-200 mb-1 tracking-wide">
+                ✨ 天使 Pau-Pau 給予你 All Pass 滿滿神級祝福！ ✨
+            </h2>
+            <p class="text-xs text-pink-100 mb-5 font-medium leading-relaxed">
+                恭喜 <span id="angelHolderName" class="font-black text-yellow-300">小熊夥伴</span> 集滿當月 3 頂學士帽！願這個月的所有指標全部高分 All Pass，業績蒸蒸日上！
+            </p>
+
+            <div class="w-full h-64 bg-gradient-to-b from-indigo-950 via-purple-950 to-pink-900 rounded-2xl relative overflow-hidden shadow-2xl border-2 border-amber-400/60 flex items-center justify-center">
+                <div class="angel-float relative z-10 w-56 h-56 flex items-center justify-center">
+                    <svg viewBox="0 0 260 275" class="w-full h-full drop-shadow-[0_0_25px_rgba(253,224,71,0.7)]">
+                        <g class="wing-left">
+                            <use href="#AngelWing" transform="translate(75, 140)"/>
+                        </g>
+                        <g class="wing-right">
+                            <use href="#AngelWing" transform="translate(185, 140) scale(-1, 1)"/>
+                        </g>
+
+                        <ellipse cx="130" cy="18" rx="36" ry="10" fill="none" stroke="#FDE047" stroke-width="6" class="halo-glow"/>
+                        <ellipse cx="130" cy="18" rx="36" ry="10" fill="rgba(254, 240, 138, 0.35)" class="halo-glow"/>
+
+                        <use href="#PauPau3DFigure"/>
+
+                        <line x1="56" y1="124" x2="32" y2="92" stroke="#FBBF24" stroke-width="4" stroke-linecap="round"/>
+                        <polygon points="32,82 35,90 43,90 37,95 39,103 32,98 25,103 27,95 21,90 29,90" fill="#FEF08A"/>
+
+                        <g transform="translate(0, 18)" opacity="0.95">
+                            <ellipse cx="130" cy="242" rx="70" ry="18" fill="#FFFBEB" filter="drop-shadow(0 4px 10px #F59E0B)"/>
+                            <circle cx="85" cy="235" r="22" fill="#FEF3C7"/>
+                            <circle cx="175" cy="235" r="22" fill="#FEF3C7"/>
+                            <circle cx="130" cy="230" r="26" fill="#FFFFFF"/>
+                            <circle cx="110" cy="232" r="20" fill="#FDE68A"/>
+                            <circle cx="150" cy="232" r="20" fill="#FDE68A"/>
+                        </g>
+                    </svg>
+                </div>
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-400/20 via-transparent to-transparent pointer-events-none"></div>
+            </div>
+
+            <div class="mt-4 flex items-center justify-center gap-3 text-xs font-black text-amber-200">
+                <span>🌟 業績衝頂</span>
+                <span>•</span>
+                <span>🎯 指標達標</span>
+                <span>•</span>
+                <span>💯 萬事順心 All Pass</span>
+            </div>
+
+            <button 
+                onclick="closeAngelModal()" 
+                class="mt-4 w-full py-3.5 rounded-2xl gold-shimmer text-amber-950 font-black text-sm shadow-xl shadow-amber-400/40 hover:scale-[1.02] transition-all"
+            >
+                收下這份天使祝福，繼續衝刺！🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. TOP NAVIGATION -->
+    <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-panda-pastel shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-panda flex items-center justify-center text-white shadow-md shadow-panda/20">
+                    <i class="fa-solid fa-stopwatch text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-black text-lg sm:text-xl text-panda tracking-tight">AM 每日任務循環</h1>
+                        <span class="hidden sm:inline-block px-2 py-0.5 text-[11px] font-bold bg-panda-soft text-panda rounded-full border border-panda-pastel">
+                            AMC 每月挑戰連動中
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-500 font-medium">每日打卡換下班機車券 × 當週五星野餐 × 每月AMC學士帽天使降臨</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <div id="clockBadge" class="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-panda-soft border border-panda-pastel text-panda-charcoal">
+                    <i class="fa-regular fa-clock text-panda"></i>
+                    <span id="currentDateDisplay" class="text-xs font-bold text-gray-600">----/--/--</span>
+                    <span id="currentTimeDisplay" class="text-sm sm:text-base font-black font-mono text-panda">--:--</span>
+                    <span id="simModeTag" class="hidden px-1.5 py-0.5 text-[10px] font-black bg-amber-400 text-amber-950 rounded-md">
+                        模擬中
+                    </span>
+                </div>
+
+                <button 
+                    onclick="switchUserAccount()" 
+                    class="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-panda-charcoal text-white font-bold text-xs sm:text-sm shadow-sm hover:bg-black transition-all"
+                    title="切換使用者 / 登出"
+                >
+                    <i class="fa-solid fa-user-astronaut text-panda-light"></i>
+                    <span id="headerUserName">載入中...</span>
+                    <i class="fa-solid fa-right-from-bracket text-[10px] opacity-75"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 4. MAIN WORKSPACE -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
+
+        <!-- SECTION 1: HERO (MASCOT + SCORE + REWARD CARDS) -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            
+            <!-- Left 5 Cols: Pau-Pau Mascot & Score -->
+            <div class="lg:col-span-5 bg-gradient-to-br from-panda via-panda-light to-pink-500 rounded-3xl p-6 text-white shadow-xl shadow-panda/20 flex flex-col justify-between relative overflow-hidden">
+                <i class="fa-solid fa-paw text-white/10 text-8xl absolute -right-4 -top-4 rotate-12 pointer-events-none"></i>
+
+                <!-- Speech Bubble -->
+                <div class="relative bg-white text-panda-charcoal rounded-2xl p-4 shadow-lg mb-4 border-2 border-panda-pastel">
+                    <div class="flex items-start justify-between gap-2.5">
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-xl">💬</span>
+                            <div>
+                                <p class="text-xs font-black text-panda uppercase tracking-wider mb-0.5">PAU-PAU 悄悄話</p>
+                                <p id="pauSpeechText" class="text-sm font-bold leading-snug">
+                                    早安！別忘了當月還有 AMC 三階段挑戰，集滿 3 頂學士帽換天使 All Pass 祝福喔！🐾
+                                </p>
+                            </div>
+                        </div>
+                        <button 
+                            onclick="togglePauOutfit(event)" 
+                            class="flex-shrink-0 px-2.5 py-1 rounded-xl bg-panda-soft hover:bg-panda-pastel text-panda font-black text-[11px] transition-all border border-panda-pastel shadow-sm"
+                            title="切換造型"
+                        >
+                            🏃 換裝
+                        </button>
+                    </div>
+                    <div class="w-4 h-4 bg-white border-r-2 border-b-2 border-panda-pastel transform rotate-45 absolute -bottom-2 left-16"></div>
+                </div>
+
+                <!-- 3D Mascot Studio Card & Stats -->
+                <div class="flex flex-col sm:flex-row items-center gap-4 my-auto py-2">
+                    <div 
+                        id="pauMascotContainer" 
+                        class="w-44 h-48 sm:w-48 sm:h-52 flex-shrink-0 bg-white rounded-3xl p-2 shadow-xl border-2 border-pink-200/80 pau-float cursor-pointer select-none relative overflow-hidden flex items-center justify-center" 
+                        onclick="pokePauPau()" 
+                        title="點我跟 Pau-Pau 互動！"
+                    >
+                        <div class="absolute top-2.5 left-3 flex items-center gap-1 pointer-events-none z-10">
+                            <svg width="16" height="16" viewBox="0 0 28 28">
+                                <use href="#FoodpandaBrandLogo"/>
+                            </svg>
+                            <span class="text-[11px] font-black tracking-tight text-[#E21B70] font-display">foodpanda</span>
+                        </div>
+
+                        <svg id="pauSvgClassic" viewBox="0 0 260 275" class="w-full h-full pt-2">
+                            <use href="#PauPau3DFigure"/>
+                        </svg>
+
+                        <svg id="pauSvgMarathon" viewBox="0 0 260 275" class="w-full h-full pt-2 hidden">
+                            <use href="#PauPau3DFigure"/>
+                            <rect x="103" y="168" width="54" height="36" rx="3.5" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+                            <rect x="103" y="168" width="54" height="9.5" rx="2" fill="#D70F64"/>
+                            <text x="130" y="175" text-anchor="middle" fill="#FFFFFF" font-size="6" font-weight="900">foodpanda</text>
+                            <text x="130" y="196" text-anchor="middle" fill="#181516" font-size="18" font-weight="900" font-family="monospace">188</text>
+                        </svg>
+                    </div>
+
+                    <!-- Progress, Stars & Pomodoro -->
+                    <div class="flex-1 w-full space-y-3">
+                        <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3.5 border border-white/25">
+                            <div class="flex justify-between items-baseline">
+                                <span class="text-xs font-bold text-pink-100">今日累積積分</span>
+                                <span class="text-xs font-bold text-amber-200">60 pts 換下班券</span>
+                            </div>
+                            <div class="flex items-baseline gap-2 mt-1">
+                                <span id="todayPointsBig" class="text-4xl font-black font-display tracking-tight">0</span>
+                                <span class="text-sm font-bold text-pink-100">points</span>
+                                <span id="pointsSpentTag" class="hidden ml-auto px-2 py-0.5 text-[11px] font-black bg-emerald-400 text-emerald-950 rounded-full">
+                                    下班券可使用 🛵
+                                </span>
+                            </div>
+                            <div class="w-full h-2.5 bg-black/20 rounded-full overflow-hidden mt-2">
+                                <div id="pointsProgressBar" class="h-full bg-amber-300 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 border border-white/25 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-pink-100">今日 17:00 前完賽星星</p>
+                                <p id="todayStarStatusText" class="text-xs sm:text-sm font-black text-white mt-0.5">尚有任務未完成</p>
+                            </div>
+                            <div id="todayStarBadge" class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center text-xl filter grayscale opacity-60 transition-all duration-500">
+                                ⭐
+                            </div>
+                        </div>
+
+                        <!-- Pomodoro Timer -->
+                        <div class="bg-white/20 backdrop-blur-md rounded-2xl p-3 border border-white/30">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-sm">🍅</span>
+                                    <span id="pomoModeLabel" class="text-xs font-black text-white">番茄鐘：25分鐘專注</span>
+                                </div>
+                                <div class="flex gap-1">
+                                    <button onclick="switchPomoMode('work')" id="pomoWorkTab" class="px-2 py-0.5 rounded-lg text-[10px] font-black bg-white text-panda">25分專注</button>
+                                    <button onclick="switchPomoMode('break')" id="pomoBreakTab" class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-black/20 text-pink-100 hover:bg-black/30">5分休息</button>
+                                    <button onclick="testPomodoroSound()" class="px-1.5 py-0.5 rounded-lg text-[10px] font-bold bg-black/20 text-amber-200 hover:bg-black/30" title="試聽完成提示音">🔔</button>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between gap-2">
+                                <span id="pomoTimeDisplay" class="text-2xl font-black font-mono tracking-wider text-amber-200">25:00</span>
+                                <div class="flex items-center gap-1.5">
+                                    <button onclick="togglePomodoro()" id="pomoStartBtn" class="px-3 py-1 rounded-xl bg-amber-300 hover:bg-amber-200 text-amber-950 font-black text-xs shadow-sm transition-all flex items-center gap-1">
+                                        <i class="fa-solid fa-play text-[10px]"></i><span>開始</span>
+                                    </button>
+                                    <button onclick="resetPomodoro()" class="px-2.5 py-1 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs transition-all" title="重設">
+                                        <i class="fa-solid fa-rotate-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-[11px] text-pink-100 flex items-center justify-between pt-2 border-t border-white/15">
+                    <span>💡 點擊 Pau-Pau 會為你加油打氣！</span>
+                    <span id="completedCountPill" class="font-bold bg-black/20 px-2.5 py-0.5 rounded-full">0 / 3 任務</span>
+                </div>
+            </div>
+
+            <!-- Right 7 Cols: Vouchers -->
+            <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                
+                <!-- VOUCHER 1: 心安理得準時下班券 -->
+                <div class="bg-white rounded-3xl p-6 shadow-lg border-2 border-panda-pastel flex flex-col justify-between relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="px-3 py-1 rounded-full bg-panda-soft text-panda font-black text-xs">每日限定</span>
+                            <span class="text-xs font-bold text-gray-400">滿 60 pts 兌換</span>
+                        </div>
+
+                        <div class="flex items-start gap-3.5 mb-4">
+                            <div class="w-14 h-14 rounded-2xl bg-panda-soft text-panda flex items-center justify-center text-3xl flex-shrink-0 shadow-inner">
+                                🛵
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-black text-panda-charcoal">心安理得準時下班券</h3>
+                                <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                                    當日三項任務全完成且滿 <strong class="text-panda">60 pts</strong> 即可兌換，觸發 Pau-Pau 騎機車回家動畫！
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-panda-soft/60 rounded-2xl p-3 space-y-2 border border-panda-pastel/70 mb-4 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600 font-medium">① 完成今日三項任務</span>
+                                <span id="reqTasksDone" class="font-black text-gray-400">0 / 3</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600 font-medium">② 當日累積滿 60 points</span>
+                                <span id="reqPointsDone" class="font-black text-gray-400">0 / 60 pts</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button 
+                            id="redeemOffWorkBtn"
+                            onclick="handleOffWorkButtonClick()"
+                            disabled
+                            class="w-full py-3.5 px-4 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 bg-gray-200 text-gray-400 cursor-not-allowed"
+                        >
+                            <i class="fa-solid fa-lock"></i>
+                            <span>完成 3 項任務且滿 60 分解鎖</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VOUCHER 2: 週末愉快休假券 -->
+                <div class="bg-white rounded-3xl p-6 shadow-lg border-2 border-amber-200 flex flex-col justify-between relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between gap-1 mb-2.5">
+                            <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-black text-xs">
+                                當週集星大獎
+                            </span>
+                            <span class="text-xs font-bold text-amber-600">滿 5 顆星兌換</span>
+                        </div>
+
+                        <div class="flex items-start gap-3.5 mb-3.5">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner">
+                                🏖️
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-black text-panda-charcoal">週末愉快休假券</h3>
+                                <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                                    每日 <strong class="text-amber-600">17:00 前</strong>完成得 1 星，當週滿 <strong class="text-amber-600">5 顆星</strong>兌換，觀賞 Pau-Pau 草地野餐！
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50/80 rounded-2xl p-3 border border-amber-200/80 mb-4">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <span class="text-xs font-bold text-amber-900">本週集星進度</span>
+                                <span id="weeklyStarCountText" class="text-xs font-black text-amber-600">0 / 5 顆星</span>
+                            </div>
+                            <div id="weeklyStarsRow" class="grid grid-cols-5 gap-2"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button 
+                            id="redeemWeekendBtn"
+                            onclick="handleWeekendButtonClick()"
+                            disabled
+                            class="w-full py-3.5 px-4 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 bg-gray-200 text-gray-400 cursor-not-allowed"
+                        >
+                            <i class="fa-solid fa-star"></i>
+                            <span>集滿 5 顆星即可兌換</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 2: 每月任務 AMC -->
+        <section class="bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 rounded-3xl p-6 sm:p-7 text-white shadow-xl relative overflow-hidden border-2 border-amber-300/40">
+            <div class="absolute -right-8 -bottom-8 opacity-10 text-9xl pointer-events-none select-none">🎓</div>
+            
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-4 mb-5">
+                <div class="flex items-center gap-3">
+                    <span class="w-12 h-12 rounded-2xl bg-amber-400 text-amber-950 flex items-center justify-center text-2xl shadow-lg">
+                        🎓
+                    </span>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-xl font-black text-white tracking-wide">每月任務 AMC</h2>
+                            <span id="currentMonthBadge" class="px-2.5 py-0.5 rounded-full bg-amber-300 text-amber-950 text-xs font-black">
+                                2026年 11月
+                            </span>
+                        </div>
+                        <p class="text-xs text-pink-200 mt-0.5">次月 1 號自動重置進度｜達成各階段可獲學士帽 🎓，集滿 3 頂換「All Pass 祝福券」！</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AMC Grid: 3 Milestones & Reward Card -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    
+                    <!-- Milestone 1 -->
+                    <div id="amcCard1" class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col justify-between transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-white/20 text-white">階段一</span>
+                                <span id="amcCapBadge1" class="text-xl filter grayscale opacity-40 transition-all">🎓</span>
+                            </div>
+                            <h4 class="text-base font-black text-white">當月 15 號達成 50%</h4>
+                            <p class="text-[11px] text-pink-200 mt-1">月中進度達標檢核，獲得第 1 頂學士帽</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/15">
+                            <button 
+                                id="amcBtn1"
+                                onclick="toggleAmcMilestone(1)" 
+                                class="w-full py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-black text-xs transition-all flex items-center justify-center gap-1.5"
+                            >
+                                <i class="fa-regular fa-square"></i>
+                                <span>點選打勾完成 (+1 🎓)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Milestone 2 -->
+                    <div id="amcCard2" class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col justify-between transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-white/20 text-white">階段二</span>
+                                <span id="amcCapBadge2" class="text-xl filter grayscale opacity-40 transition-all">🎓</span>
+                            </div>
+                            <h4 class="text-base font-black text-white">當月 20 號達成 75%</h4>
+                            <p class="text-[11px] text-pink-200 mt-1">下旬衝刺達標檢核，獲得第 2 頂學士帽</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/15">
+                            <button 
+                                id="amcBtn2"
+                                onclick="toggleAmcMilestone(2)" 
+                                class="w-full py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-black text-xs transition-all flex items-center justify-center gap-1.5"
+                            >
+                                <i class="fa-regular fa-square"></i>
+                                <span>點選打勾完成 (+1 🎓)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Milestone 3 -->
+                    <div id="amcCard3" class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col justify-between transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-white/20 text-white">階段三</span>
+                                <span id="amcCapBadge3" class="text-xl filter grayscale opacity-40 transition-all">🎓</span>
+                            </div>
+                            <h4 class="text-base font-black text-white">當月 25 號達成 100%</h4>
+                            <p class="text-[11px] text-pink-200 mt-1">月底全滿完成檢核，獲得第 3 頂學士帽</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/15">
+                            <button 
+                                id="amcBtn3"
+                                onclick="toggleAmcMilestone(3)" 
+                                class="w-full py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-black text-xs transition-all flex items-center justify-center gap-1.5"
+                            >
+                                <i class="fa-regular fa-square"></i>
+                                <span>點選打勾完成 (+1 🎓)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ALL PASS Reward Pass -->
+                <div class="lg:col-span-4 bg-gradient-to-br from-amber-400 via-amber-300 to-yellow-200 rounded-2xl p-5 text-amber-950 flex flex-col justify-between shadow-lg border-2 border-white/50">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-950 text-yellow-300 font-black text-[10px]">
+                                每月終極榮耀
+                            </span>
+                            <span id="amcCapsCountText" class="text-xs font-black text-amber-900">0 / 3 頂學士帽</span>
+                        </div>
+                        <h3 class="text-xl font-black mb-1">All Pass 祝福券 ✨</h3>
+                        <p class="text-xs text-amber-900 font-medium leading-relaxed">
+                            集滿當月 3 頂學士帽即可獲得！使用時將召喚<strong>「天使 Pau-Pau」</strong>降臨給予你全方位業績滿分神級祝福！
+                        </p>
+                        
+                        <div class="flex items-center justify-center gap-3 my-3 bg-white/60 rounded-xl py-2">
+                            <span id="slotCap1" class="text-2xl filter grayscale opacity-30 transition-all">🎓</span>
+                            <span id="slotCap2" class="text-2xl filter grayscale opacity-30 transition-all">🎓</span>
+                            <span id="slotCap3" class="text-2xl filter grayscale opacity-30 transition-all">🎓</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button 
+                            id="redeemAmcPassBtn"
+                            onclick="handleAmcPassButtonClick()" 
+                            disabled
+                            class="w-full py-3 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-2 bg-amber-950/20 text-amber-900/60 cursor-not-allowed"
+                        >
+                            <i class="fa-solid fa-lock"></i>
+                            <span>集滿 3 頂學士帽解鎖</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: DAILY TASKS & MONTHLY PROGRESS -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- LEFT 7 COLS: 每日任務 -->
+            <div class="lg:col-span-7 space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 bg-white px-5 py-4 rounded-3xl shadow-sm border border-panda-pastel">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-panda text-white flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-list-check"></i>
+                        </span>
+                        <div>
+                            <h2 class="text-lg font-black text-panda-charcoal">每日任務</h2>
+                            <p class="text-xs text-gray-500">依打卡時段自動計分（當日下午 5:00 前完成三項任務可獲 1 顆星星 ⭐）</p>
+                        </div>
+                    </div>
+                    <span id="activeTimeRuleHint" class="px-3 py-1 rounded-full bg-panda-soft text-panda font-bold text-xs">
+                        時段計分生效中
+                    </span>
+                </div>
+
+                <!-- TASK 1 -->
+                <div id="taskCard1" class="bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel transition-all">
+                    <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-panda-soft text-panda flex items-center justify-center text-xl font-black shadow-inner">01</div>
+                            <div>
+                                <h3 class="text-lg font-black text-panda-charcoal">任務一：gosubar訊息回覆</h3>
+                                <p class="text-xs text-gray-500 mt-0.5">10:30前完成回覆 25 pts｜10:30後完成回覆 15 pts｜11:30前沒有訊息 10 pts｜逾時 0 pts</p>
+                            </div>
+                        </div>
+                        <div id="task1StatusBadge"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="task1Buttons"></div>
+                </div>
+
+                <!-- TASK 2 -->
+                <div id="taskCard2" class="bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel transition-all">
+                    <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-panda-soft text-panda flex items-center justify-center text-xl font-black shadow-inner">02</div>
+                            <div>
+                                <h3 class="text-lg font-black text-panda-charcoal">任務二：case處理</h3>
+                                <p class="text-xs text-gray-500 mt-0.5">下午2:30前完成處理 25 pts｜2:30後完成處理 15 pts｜下午3:30前沒有case 10 pts｜逾時 0 pts</p>
+                            </div>
+                        </div>
+                        <div id="task2StatusBadge"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="task2Buttons"></div>
+                </div>
+
+                <!-- TASK 3 -->
+                <div id="taskCard3" class="bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel transition-all">
+                    <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-panda-soft text-panda flex items-center justify-center text-xl font-black shadow-inner">03</div>
+                            <div>
+                                <h3 class="text-lg font-black text-panda-charcoal">任務三：新店家聯繫</h3>
+                                <p class="text-xs text-gray-500 mt-0.5">下午3:30前完成聯繫 25 pts｜3:30~17:00完成聯繫 15 pts｜下午3:30前沒有新店家 10 pts｜17:00後逾時 0 pts</p>
+                            </div>
+                        </div>
+                        <div id="task3StatusBadge"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="task3Buttons"></div>
+                </div>
+
+                <!-- BONUS TASK -->
+                <div id="bonusTaskCard" class="bg-gradient-to-r from-amber-50 via-white to-pink-50 rounded-3xl p-5 sm:p-6 shadow-md border-2 border-amber-300 transition-all">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-400 text-amber-950 flex items-center justify-center text-2xl font-black shadow-md">🌟</div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-amber-200 text-amber-900">加分項目 BONUS</span>
+                                    <span class="text-xs font-black text-panda">+30 points</span>
+                                </div>
+                                <h3 class="text-lg font-black text-panda-charcoal mt-0.5">當日新成交廣告或折扣</h3>
+                                <p class="text-xs text-gray-500">點選打勾「成交店家」可獲得 30 points！</p>
+                            </div>
+                        </div>
+                        <div id="bonusTaskAction" class="w-full sm:w-auto"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT 5 COLS: 當月進度 & 票券夾 -->
+            <div class="lg:col-span-5 space-y-5">
+                <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-panda text-white flex items-center justify-center font-bold">
+                                <i class="fa-regular fa-calendar-check"></i>
+                            </span>
+                            <div>
+                                <h2 class="text-lg font-black text-panda-charcoal">當月進度</h2>
+                                <p class="text-xs text-gray-500">點選日期查看每日任務紀錄與積分</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1 bg-panda-soft px-2 py-1 rounded-xl border border-panda-pastel">
+                            <button onclick="changeMonth(-1)" class="w-7 h-7 rounded-lg hover:bg-white text-panda flex items-center justify-center transition-all">
+                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                            </button>
+                            <span id="calendarMonthTitle" class="text-xs sm:text-sm font-black text-panda-charcoal px-2">2026年 11月</span>
+                            <button onclick="changeMonth(1)" class="w-7 h-7 rounded-lg hover:bg-white text-panda flex items-center justify-center transition-all">
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-center">
+                        <div class="bg-panda-soft/60 rounded-2xl p-2.5 border border-panda-pastel">
+                            <p class="text-[10px] font-bold text-gray-500">本月積分</p>
+                            <p id="monthTotalPoints" class="text-base font-black text-panda mt-0.5">0</p>
+                        </div>
+                        <div class="bg-amber-50 rounded-2xl p-2.5 border border-amber-200">
+                            <p class="text-[10px] font-bold text-amber-800">累積星星 ⭐</p>
+                            <p id="monthTotalStars" class="text-base font-black text-amber-600 mt-0.5">0</p>
+                        </div>
+                        <div class="bg-emerald-50 rounded-2xl p-2.5 border border-emerald-200">
+                            <p class="text-[10px] font-bold text-emerald-800">下班券 🛵</p>
+                            <p id="monthTotalOffWork" class="text-base font-black text-emerald-600 mt-0.5">0</p>
+                        </div>
+                        <div class="bg-purple-50 rounded-2xl p-2.5 border border-purple-200">
+                            <p class="text-[10px] font-bold text-purple-800">休假券 🏖️</p>
+                            <p id="monthTotalWeekend" class="text-base font-black text-purple-600 mt-0.5">0</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-7 gap-1 text-center text-xs font-black text-gray-400 mb-1">
+                        <div class="text-rose-400">日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div class="text-rose-400">六</div>
+                    </div>
+                    <div id="calendarGrid" class="grid grid-cols-7 gap-1"></div>
+                </div>
+
+                <!-- Daily Inspection & Wallet -->
+                <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-black text-panda-charcoal flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass-chart text-panda"></i>
+                            <span id="selectedDateTitle">當日明細檢視</span>
+                        </h3>
+                        <span id="selectedDatePointsPill" class="px-2.5 py-0.5 rounded-full bg-panda-soft text-panda font-black text-xs">0 pts</span>
+                    </div>
+
+                    <div id="selectedDateDetailBox" class="bg-panda-soft/40 rounded-2xl p-3 border border-panda-pastel text-xs space-y-1.5"></div>
+
+                    <!-- Voucher Wallet -->
+                    <div class="pt-2 border-t border-gray-100">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-black text-gray-500 uppercase tracking-wider">
+                                🎒 我的票券夾（點擊觸發機車 / 野餐 / 天使動畫）
+                            </span>
+                            <span id="walletCountText" class="text-xs font-bold text-panda">共 0 張</span>
+                        </div>
+                        <div id="voucherWalletList" class="space-y-2 max-h-52 overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-xs w-full pointer-events-none"></div>
+
+    <!-- 5. JAVASCRIPT LOGIC -->
+    <script>
+        const REQUIRED_PASSCODE = '9527';
+        const STORAGE_KEY = 'paupau_am_loop_v2';
+        const OFF_WORK_REQUIRED_PTS = 60; // 積分門檻已調整為 60 pts
+
+        let appData = {
+            userName: '',
+            passcodeAuth: false,
+            days: {},
+            weekendVouchers: [],
+            monthlyAmc: {
+                currentMonth: '',
+                m1: false,
+                m2: false,
+                m3: false,
+                allPassRedeemed: false,
+                allPassSerial: null,
+                allPassTime: null
+            }
+        };
+
+        let simulatedTimeStr = null;
+        let viewingYear = new Date().getFullYear();
+        let viewingMonth = new Date().getMonth();
+        let selectedDateKey = '';
+
+        function getCurrentYearMonth() {
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            return `${y}-${m}`;
+        }
+
+        function checkMonthlyAmcReset() {
+            const thisMonth = getCurrentYearMonth();
+            if (appData.monthlyAmc.currentMonth !== thisMonth) {
+                appData.monthlyAmc = {
+                    currentMonth: thisMonth,
+                    m1: false,
+                    m2: false,
+                    m3: false,
+                    allPassRedeemed: false,
+                    allPassSerial: null,
+                    allPassTime: null
+                };
+                saveStorage();
+            }
+        }
+
+        function loadStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    appData = {
+                        userName: parsed.userName || '',
+                        passcodeAuth: parsed.passcodeAuth || false,
+                        days: parsed.days || {},
+                        weekendVouchers: parsed.weekendVouchers || [],
+                        monthlyAmc: parsed.monthlyAmc || {
+                            currentMonth: getCurrentYearMonth(),
+                            m1: false,
+                            m2: false,
+                            m3: false,
+                            allPassRedeemed: false,
+                            allPassSerial: null,
+                            allPassTime: null
+                        }
+                    };
+                } else {
+                    appData.monthlyAmc.currentMonth = getCurrentYearMonth();
+                }
+                checkMonthlyAmcReset();
+            } catch (e) {
+                console.error('Storage error:', e);
+            }
+        }
+
+        function saveStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (e) {
+                console.error('Save error:', e);
+            }
+        }
+
+        function formatDateKey(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function getTodayKey() {
+            return formatDateKey(new Date());
+        }
+
+        function getEffectiveTime() {
+            if (simulatedTimeStr) {
+                const [hh, mm] = simulatedTimeStr.split(':').map(Number);
+                return { timeStr: simulatedTimeStr, minutes: hh * 60 + mm, isSimulated: true };
+            }
+            const now = new Date();
+            const hh = now.getHours();
+            const mm = now.getMinutes();
+            return {
+                timeStr: `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`,
+                minutes: hh * 60 + mm,
+                isSimulated: false
+            };
+        }
+
+        function getDayRecord(dateKey) {
+            if (!appData.days[dateKey]) {
+                appData.days[dateKey] = {
+                    t1: null,
+                    t2: null,
+                    t3: null,
+                    bonus: false,
+                    starEarned: false,
+                    starTime: null,
+                    offWorkRedeemed: false,
+                    offWorkSerial: null,
+                    offWorkTime: null
+                };
+            }
+            return appData.days[dateKey];
+        }
+
+        /* Scoring Rules */
+        function calcTask1Points(choice, minutes) {
+            if (minutes > 11 * 60 + 30) return 0;
+            if (choice === 'reply') return minutes <= 10 * 60 + 30 ? 25 : 15;
+            if (choice === 'none') return 10;
+            return 0;
+        }
+
+        function calcTask2Points(choice, minutes) {
+            if (minutes > 15 * 60 + 30) return 0;
+            if (choice === 'done') return minutes <= 14 * 60 + 30 ? 25 : 15;
+            if (choice === 'none') return 10;
+            return 0;
+        }
+
+        function calcTask3Points(choice, minutes) {
+            if (choice === 'contact') {
+                if (minutes <= 15 * 60 + 30) return 25;
+                if (minutes <= 17 * 60) return 15;
+                return 0;
+            } else if (choice === 'none') {
+                return minutes <= 15 * 60 + 30 ? 10 : 0;
+            }
+            return 0;
+        }
+
+        function getDayTotalPoints(record) {
+            if (!record) return 0;
+            let total = 0;
+            if (record.t1) total += record.t1.points;
+            if (record.t2) total += record.t2.points;
+            if (record.t3) total += record.t3.points;
+            if (record.bonus) total += 30;
+            return total;
+        }
+
+        function isAllCoreTasksDone(record) {
+            return Boolean(record && record.t1 && record.t2 && record.t3);
+        }
+
+        /* Gatekeeper Auth */
+        document.getElementById('gatekeeperForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nameVal = document.getElementById('gateUserName').value.trim();
+            const passVal = document.getElementById('gatePasscode').value.trim();
+            const errEl = document.getElementById('gateErrorText');
+
+            if (passVal !== REQUIRED_PASSCODE) {
+                errEl.classList.remove('hidden');
+                document.getElementById('gatePasscode').classList.add('border-rose-500');
+                return;
+            }
+
+            errEl.classList.add('hidden');
+            document.getElementById('gatePasscode').classList.remove('border-rose-500');
+            appData.userName = nameVal;
+            appData.passcodeAuth = true;
+            saveStorage();
+            document.getElementById('gatekeeperModal').classList.add('hidden');
+            renderAll();
+            confetti({ particleCount: 60, spread: 70 });
+            showToast(`🎉 歡迎 ${nameVal} 進入 AM 每日任務系統！`, 'success');
+        });
+
+        function switchUserAccount() {
+            appData.passcodeAuth = false;
+            saveStorage();
+            document.getElementById('gateUserName').value = appData.userName || '';
+            document.getElementById('gatePasscode').value = '';
+            document.getElementById('gatekeeperModal').classList.remove('hidden');
+        }
+
+        /* Monthly AMC Functions */
+        function getAmcCapsCount() {
+            let count = 0;
+            if (appData.monthlyAmc.m1) count++;
+            if (appData.monthlyAmc.m2) count++;
+            if (appData.monthlyAmc.m3) count++;
+            return count;
+        }
+
+        function toggleAmcMilestone(num) {
+            const key = 'm' + num;
+            appData.monthlyAmc[key] = !appData.monthlyAmc[key];
+            saveStorage();
+            renderAmcSection();
+            triggerMascotCheer();
+            if (appData.monthlyAmc[key]) {
+                confetti({ particleCount: 45, spread: 60 });
+                showToast(`🎓 恭喜獲得 AMC 第 ${num} 階段學士帽！`, 'star');
+            }
+        }
+
+        function handleAmcPassButtonClick() {
+            const count = getAmcCapsCount();
+            if (count < 3) return;
+
+            const eff = getEffectiveTime();
+            if (!appData.monthlyAmc.allPassRedeemed) {
+                appData.monthlyAmc.allPassRedeemed = true;
+                appData.monthlyAmc.allPassSerial = 'ALLPASS-' + Math.floor(1000 + Math.random() * 9000);
+                appData.monthlyAmc.allPassTime = `${getTodayKey()} ${eff.timeStr}`;
+                saveStorage();
+                renderAmcSection();
+                renderWallet();
+            }
+
+            openVoucherModal({
+                type: 'allpass',
+                title: 'All Pass 祝福券',
+                subtitle: 'MONTHLY AMC PASS',
+                tag: '🎓 3頂學士帽榮耀',
+                icon: '👼',
+                desc: '當月 15號/20號/25號 AMC 里程碑全滿達標！Pau-Pau 化身天使降臨，送上滿滿萬事 All Pass 祝福！',
+                dateStr: appData.monthlyAmc.allPassTime || `${getTodayKey()} ${eff.timeStr}`,
+                costStr: '當月 3 頂學士帽兌換',
+                serial: `#${appData.monthlyAmc.allPassSerial}`
+            });
+        }
+
+        /* Task Actions */
+        function selectTaskOption(taskNum, choice) {
+            const todayKey = getTodayKey();
+            const record = getDayRecord(todayKey);
+            const eff = getEffectiveTime();
+
+            let earned = 0;
+            let label = '';
+
+            if (taskNum === 1) {
+                earned = calcTask1Points(choice, eff.minutes);
+                label = choice === 'reply' ? '完成回覆' : '沒有訊息';
+                record.t1 = { choice, label, points: earned, time: eff.timeStr };
+            } else if (taskNum === 2) {
+                earned = calcTask2Points(choice, eff.minutes);
+                label = choice === 'done' ? '完成處理' : '沒有case';
+                record.t2 = { choice, label, points: earned, time: eff.timeStr };
+            } else if (taskNum === 3) {
+                earned = calcTask3Points(choice, eff.minutes);
+                label = choice === 'contact' ? '完成聯繫' : '沒有新店家';
+                record.t3 = { choice, label, points: earned, time: eff.timeStr };
+            }
+
+            if (isAllCoreTasksDone(record)) {
+                if (eff.minutes <= 17 * 60 && !record.starEarned) {
+                    record.starEarned = true;
+                    record.starTime = eff.timeStr;
+                    confetti({ particleCount: 50, spread: 60 });
+                    showToast('⭐ 下午 5:00 前完成所有每日任務，獲得今日星星 1 顆！', 'star');
+                }
+            }
+
+            saveStorage();
+            selectedDateKey = todayKey;
+            renderAll();
+            triggerMascotCheer();
+            showToast(`🐾 任務${taskNum}「${label}」打卡成功 (+${earned} pts)`, earned > 0 ? 'success' : 'warning');
+        }
+
+        function clearTaskOption(taskNum) {
+            const todayKey = getTodayKey();
+            const record = getDayRecord(todayKey);
+            if (taskNum === 1) record.t1 = null;
+            if (taskNum === 2) record.t2 = null;
+            if (taskNum === 3) record.t3 = null;
+            if (!isAllCoreTasksDone(record)) {
+                record.starEarned = false;
+                record.starTime = null;
+            }
+            saveStorage();
+            renderAll();
+        }
+
+        function toggleBonusTask() {
+            const todayKey = getTodayKey();
+            const record = getDayRecord(todayKey);
+            record.bonus = !record.bonus;
+            saveStorage();
+            selectedDateKey = todayKey;
+            renderAll();
+            triggerMascotCheer();
+            if (record.bonus) {
+                confetti({ particleCount: 40, spread: 60 });
+                showToast('🌟 成交店家加分！+30 points 已加入', 'success');
+            }
+        }
+
+        /* Voucher Handlers */
+        function handleOffWorkButtonClick() {
+            const todayKey = getTodayKey();
+            const record = getDayRecord(todayKey);
+            const totalPts = getDayTotalPoints(record);
+
+            if (!isAllCoreTasksDone(record) || totalPts < OFF_WORK_REQUIRED_PTS) return;
+
+            const eff = getEffectiveTime();
+            if (!record.offWorkRedeemed) {
+                record.offWorkRedeemed = true;
+                record.offWorkTime = eff.timeStr;
+                record.offWorkSerial = 'OFF-' + Math.floor(1000 + Math.random() * 9000);
+                saveStorage();
+                renderAll();
+            }
+
+            openVoucherModal({
+                type: 'offwork',
+                title: '心安理得準時下班券',
+                subtitle: 'DAILY OFF-WORK PASS',
+                tag: '60 PTS 認證兌換',
+                icon: '🛵',
+                desc: '今日三項任務已全部完成且達 60 points！Pau-Pau 核准你今天準時關電腦、騎機車心安理得下班回家！',
+                dateStr: `${todayKey} ${record.offWorkTime}`,
+                costStr: '60 Points 兌換',
+                serial: `#${record.offWorkSerial}`
+            });
+        }
+
+        function handleWeekendButtonClick() {
+            const weekInfo = getCurrentWeekDates();
+            const starsEarned = weekInfo.days.filter(d => appData.days[d.dateKey]?.starEarned).length;
+            if (starsEarned < 5) return;
+
+            let existing = appData.weekendVouchers.find(v => v.weekKey === weekInfo.weekKey);
+            const eff = getEffectiveTime();
+            if (!existing) {
+                existing = {
+                    weekKey: weekInfo.weekKey,
+                    dateIssued: `${getTodayKey()} ${eff.timeStr}`,
+                    serial: 'WKND-' + Math.floor(1000 + Math.random() * 9000)
+                };
+                appData.weekendVouchers.push(existing);
+                saveStorage();
+                renderAll();
+            }
+
+            openVoucherModal({
+                type: 'weekend',
+                title: '週末愉快休假券',
+                subtitle: '5-STAR WEEKLY PASS',
+                tag: '⭐⭐⭐⭐⭐ 滿星榮耀',
+                icon: '🏖️',
+                desc: '太棒了！本週連續在 17:00 前完成所有任務，集滿 5 顆星！快使用這張票券，看 Pau-Pau 出去郊遊野餐！',
+                dateStr: existing.dateIssued,
+                costStr: '當週 5 顆星兌換',
+                serial: `#${existing.serial}`
+            });
+        }
+
+        function getCurrentWeekDates() {
+            const now = new Date();
+            const dayOfWeek = now.getDay();
+            const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+            const monday = new Date(now);
+            monday.setDate(now.getDate() + diffToMonday);
+
+            const days = [];
+            const labels = ['週一', '週二', '週三', '週四', '週五'];
+            for (let i = 0; i < 5; i++) {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                days.push({
+                    dateKey: formatDateKey(d),
+                    label: labels[i],
+                    shortDate: `${d.getMonth() + 1}/${d.getDate()}`
+                });
+            }
+            return { weekKey: formatDateKey(monday), days };
+        }
+
+        /* Render Logic */
+        function renderAll() {
+            renderHeader();
+            renderHero();
+            renderAmcSection();
+            renderDailyTasks();
+            renderCalendar();
+            renderInspector();
+            renderWallet();
+        }
+
+        function renderHeader() {
+            document.getElementById('headerUserName').textContent = appData.userName || '小熊夥伴';
+            const eff = getEffectiveTime();
+            document.getElementById('currentDateDisplay').textContent = getTodayKey().replace(/-/g, '/');
+            document.getElementById('currentTimeDisplay').textContent = eff.timeStr;
+            const simTag = document.getElementById('simModeTag');
+            if (simTag) {
+                if (eff.isSimulated) simTag.classList.remove('hidden');
+                else simTag.classList.add('hidden');
+            }
+        }
+
+        function renderHero() {
+            const todayKey = getTodayKey();
+            const rec = getDayRecord(todayKey);
+            const totalPts = getDayTotalPoints(rec);
+            const eff = getEffectiveTime();
+
+            document.getElementById('todayPointsBig').textContent = totalPts;
+            document.getElementById('pointsProgressBar').style.width = `${Math.min(100, Math.round((totalPts / OFF_WORK_REQUIRED_PTS) * 100))}%`;
+            
+            const spentTag = document.getElementById('pointsSpentTag');
+            if (rec.offWorkRedeemed) spentTag.classList.remove('hidden');
+            else spentTag.classList.add('hidden');
+
+            const doneCount = [rec.t1, rec.t2, rec.t3].filter(Boolean).length;
+            document.getElementById('completedCountPill').textContent = `${doneCount} / 3 任務`;
+
+            const starText = document.getElementById('todayStarStatusText');
+            const starBadge = document.getElementById('todayStarBadge');
+            if (rec.starEarned) {
+                starText.innerHTML = `<span class="text-amber-200">🎉 已於 ${rec.starTime || '17:00前'} 獲得今日星！</span>`;
+                starBadge.className = 'w-10 h-10 rounded-2xl bg-amber-300/30 border border-amber-200 flex items-center justify-center text-xl shadow-lg scale-110';
+            } else if (doneCount === 3 && eff.minutes > 17 * 60) {
+                starText.textContent = '逾 17:00 完成 (無今日星)';
+                starBadge.className = 'w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center text-xl filter grayscale opacity-50';
+            } else {
+                starText.textContent = `17:00 前完成三項得 ⭐ (${doneCount}/3)`;
+                starBadge.className = 'w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center text-xl filter grayscale opacity-60';
+            }
+
+            // Voucher 1: 60 pts 判定
+            const reqTasksEl = document.getElementById('reqTasksDone');
+            const reqPtsEl = document.getElementById('reqPointsDone');
+            const offWorkBtn = document.getElementById('redeemOffWorkBtn');
+
+            reqTasksEl.innerHTML = doneCount === 3 ? '<i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>3/3 完成' : `${doneCount}/3`;
+            reqPtsEl.innerHTML = totalPts >= OFF_WORK_REQUIRED_PTS ? `<i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>${totalPts}/${OFF_WORK_REQUIRED_PTS} 達標` : `${totalPts}/${OFF_WORK_REQUIRED_PTS} pts`;
+
+            if (rec.offWorkRedeemed) {
+                offWorkBtn.disabled = false;
+                offWorkBtn.className = 'w-full py-3.5 px-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg cursor-pointer';
+                offWorkBtn.innerHTML = `<i class="fa-solid fa-motorcycle"></i><span>使用下班券（看 Pau-Pau 騎機車回家）</span>`;
+            } else if (doneCount === 3 && totalPts >= OFF_WORK_REQUIRED_PTS) {
+                offWorkBtn.disabled = false;
+                offWorkBtn.className = 'w-full py-3.5 px-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shimmer-btn text-white shadow-lg shadow-panda/30 hover:scale-[1.02] cursor-pointer';
+                offWorkBtn.innerHTML = `<i class="fa-solid fa-ticket"></i><span>立即兌換「心安理得準時下班券」</span>`;
+            } else {
+                offWorkBtn.disabled = true;
+                offWorkBtn.className = 'w-full py-3.5 px-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 bg-gray-100 text-gray-400 cursor-not-allowed';
+                offWorkBtn.innerHTML = `<i class="fa-solid fa-lock"></i><span>完成 3 項任務且滿 ${OFF_WORK_REQUIRED_PTS} 分解鎖</span>`;
+            }
+
+            // Voucher 2
+            const weekInfo = getCurrentWeekDates();
+            const starsRow = document.getElementById('weeklyStarsRow');
+            let weeklyStarsCount = 0;
+
+            starsRow.innerHTML = weekInfo.days.map(d => {
+                const hasStar = Boolean(appData.days[d.dateKey]?.starEarned);
+                if (hasStar) weeklyStarsCount++;
+                const isToday = d.dateKey === todayKey;
+                return `
+                    <div class="rounded-xl p-1.5 text-center border ${hasStar ? 'bg-amber-100 border-amber-400' : 'bg-white border-amber-200/60 opacity-75'} ${isToday ? 'ring-2 ring-panda' : ''}">
+                        <p class="text-[9px] font-bold ${hasStar ? 'text-amber-900' : 'text-gray-400'}">${d.label}</p>
+                        <div class="text-base my-0.5 ${hasStar ? '' : 'grayscale opacity-30'}">⭐</div>
+                        <p class="text-[9px] font-mono text-gray-400">${d.shortDate}</p>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('weeklyStarCountText').textContent = `${weeklyStarsCount} / 5 顆星`;
+
+            const weekendBtn = document.getElementById('redeemWeekendBtn');
+            const alreadyRedeemedWeek = appData.weekendVouchers.find(v => v.weekKey === weekInfo.weekKey);
+
+            if (alreadyRedeemedWeek && weeklyStarsCount >= 5) {
+                weekendBtn.disabled = false;
+                weekendBtn.className = 'w-full py-3.5 px-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg cursor-pointer';
+                weekendBtn.innerHTML = `<i class="fa-solid fa-tree"></i><span>使用休假券（看 Pau-Pau 出去野餐）</span>`;
+            } else if (weeklyStarsCount >= 5) {
+                weekendBtn.disabled = false;
+                weekendBtn.className = 'w-full py-3.5 px-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 gold-shimmer text-amber-950 shadow-lg shadow-amber-500/30 hover:scale-[1.02] cursor-pointer';
+                weekendBtn.innerHTML = `<i class="fa-solid fa-crown"></i><span>集滿 5 星！兌換「週末愉快休假券」</span>`;
+            } else {
+                weekendBtn.disabled = true;
+                weekendBtn.className = 'w-full py-3.5 px-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 bg-gray-100 text-gray-400 cursor-not-allowed';
+                weekendBtn.innerHTML = `<i class="fa-solid fa-star"></i><span>還差 ${5 - weeklyStarsCount} 顆星解鎖休假券</span>`;
+            }
+        }
+
+        /* Render AMC Section */
+        function renderAmcSection() {
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = now.getMonth() + 1;
+            document.getElementById('currentMonthBadge').textContent = `${y}年 ${m}月`;
+
+            const m1 = appData.monthlyAmc.m1;
+            const m2 = appData.monthlyAmc.m2;
+            const m3 = appData.monthlyAmc.m3;
+            const capsCount = getAmcCapsCount();
+
+            const card1 = document.getElementById('amcCard1');
+            const cap1 = document.getElementById('amcCapBadge1');
+            const btn1 = document.getElementById('amcBtn1');
+            if (m1) {
+                card1.className = 'bg-white/20 backdrop-blur-md rounded-2xl p-4 border-2 border-amber-300 flex flex-col justify-between transition-all';
+                cap1.className = 'text-xl filter-none opacity-100 scale-125 transition-all';
+                btn1.className = 'w-full py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-amber-950 font-black text-xs transition-all flex items-center justify-center gap-1.5';
+                btn1.innerHTML = `<i class="fa-solid fa-square-check text-sm"></i><span>已達成 50% 檢核</span>`;
+            } else {
+                card1.className = 'bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col justify-between transition-all';
+                cap1.className = 'text-xl filter grayscale opacity-40 transition-all';
+                btn1.className = 'w-full py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-black text-xs transition-all flex items-center justify-center gap-1.5';
+                btn1.innerHTML = `<i class="fa-regular fa-square"></i><span>點選打勾完成 (+1 🎓)</span>`;
+            }
+
+            const card2 = document.getElementById('amcCard2');
+            const cap2 = document.getElementById('amcCapBadge2');
+            const btn2 = document.getElementById('amcBtn2');
+            if (m2) {
+                card2.className = 'bg-white/20 backdrop-blur-md rounded-2xl p-4 border-2 border-amber-300 flex flex-col justify-between transition-all';
+                cap2.className = 'text-xl filter-none opacity-100 scale-125 transition-all';
+                btn2.className = 'w-full py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-amber-950 font-black text-xs transition-all flex items-center justify-center gap-1.5';
+                btn2.innerHTML = `<i class="fa-solid fa-square-check text-sm"></i><span>已達成 75% 檢核</span>`;
+            } else {
+                card2.className = 'bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col justify-between transition-all';
+                cap2.className = 'text-xl filter grayscale opacity-40 transition-all';
+                btn2.className = 'w-full py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-black text-xs transition-all flex items-center justify-center gap-1.5';
+                btn2.innerHTML = `<i class="fa-regular fa-square"></i><span>點選打勾完成 (+1 🎓)</span>`;
+            }
+
+            const card3 = document.getElementById('amcCard3');
+            const cap3 = document.getElementById('amcCapBadge3');
+            const btn3 = document.getElementById('amcBtn3');
+            if (m3) {
+                card3.className = 'bg-white/20 backdrop-blur-md rounded-2xl p-4 border-2 border-amber-300 flex flex-col justify-between transition-all';
+                cap3.className = 'text-xl filter-none opacity-100 scale-125 transition-all';
+                btn3.className = 'w-full py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-amber-950 font-black text-xs transition-all flex items-center justify-center gap-1.5';
+                btn3.innerHTML = `<i class="fa-solid fa-square-check text-sm"></i><span>已達成 100% 檢核</span>`;
+            } else {
+                card3.className = 'bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col justify-between transition-all';
+                cap3.className = 'text-xl filter grayscale opacity-40 transition-all';
+                btn3.className = 'w-full py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-black text-xs transition-all flex items-center justify-center gap-1.5';
+                btn3.innerHTML = `<i class="fa-regular fa-square"></i><span>點選打勾完成 (+1 🎓)</span>`;
+            }
+
+            document.getElementById('slotCap1').className = m1 ? 'text-2xl filter-none opacity-100 scale-125 transition-all' : 'text-2xl filter grayscale opacity-30 transition-all';
+            document.getElementById('slotCap2').className = m2 ? 'text-2xl filter-none opacity-100 scale-125 transition-all' : 'text-2xl filter grayscale opacity-30 transition-all';
+            document.getElementById('slotCap3').className = m3 ? 'text-2xl filter-none opacity-100 scale-125 transition-all' : 'text-2xl filter grayscale opacity-30 transition-all';
+            document.getElementById('amcCapsCountText').textContent = `${capsCount} / 3 頂學士帽`;
+
+            const passBtn = document.getElementById('redeemAmcPassBtn');
+            if (appData.monthlyAmc.allPassRedeemed) {
+                passBtn.disabled = false;
+                passBtn.className = 'w-full py-3 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-2 celestial-shimmer text-white shadow-lg cursor-pointer';
+                passBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i><span>使用祝福券（天使 Pau-Pau 降臨！）</span>`;
+            } else if (capsCount >= 3) {
+                passBtn.disabled = false;
+                passBtn.className = 'w-full py-3 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-2 bg-amber-950 hover:bg-black text-yellow-300 shadow-lg cursor-pointer';
+                passBtn.innerHTML = `<i class="fa-solid fa-gift"></i><span>集滿 3 頂帽！兌換「All Pass 祝福券」</span>`;
+            } else {
+                passBtn.disabled = true;
+                passBtn.className = 'w-full py-3 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-2 bg-amber-950/20 text-amber-900/60 cursor-not-allowed';
+                passBtn.innerHTML = `<i class="fa-solid fa-lock"></i><span>還差 ${3 - capsCount} 頂學士帽解鎖</span>`;
+            }
+        }
+
+        function renderDailyTasks() {
+            const todayKey = getTodayKey();
+            const rec = getDayRecord(todayKey);
+            const eff = getEffectiveTime();
+
+            renderTaskBlock(1, rec.t1, 'task1StatusBadge', 'task1Buttons', 'taskCard1', [
+                { key: 'reply', title: '1. 完成回覆', sub: '已完成 gosubar 訊息回覆', pts: calcTask1Points('reply', eff.minutes), icon: 'fa-comment-dots' },
+                { key: 'none', title: '2. 沒有訊息', sub: '確認目前沒有待回訊息', pts: calcTask1Points('none', eff.minutes), icon: 'fa-inbox' }
+            ]);
+
+            renderTaskBlock(2, rec.t2, 'task2StatusBadge', 'task2Buttons', 'taskCard2', [
+                { key: 'done', title: '1. 完成處理', sub: '今日 case 已完成處理', pts: calcTask2Points('done', eff.minutes), icon: 'fa-briefcase' },
+                { key: 'none', title: '2. 沒有case', sub: '確認目前沒有待處理 case', pts: calcTask2Points('none', eff.minutes), icon: 'fa-folder-open' }
+            ]);
+
+            renderTaskBlock(3, rec.t3, 'task3StatusBadge', 'task3Buttons', 'taskCard3', [
+                { key: 'contact', title: '1. 完成聯繫', sub: '已完成新店家聯繫作業', pts: calcTask3Points('contact', eff.minutes), icon: 'fa-phone' },
+                { key: 'none', title: '2. 沒有新店家', sub: '今日無新店家名單需聯繫', pts: calcTask3Points('none', eff.minutes), icon: 'fa-store-slash' }
+            ]);
+
+            const bonusActionEl = document.getElementById('bonusTaskAction');
+            if (rec.bonus) {
+                bonusActionEl.innerHTML = `
+                    <button onclick="toggleBonusTask()" class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-500 text-amber-950 font-black text-xs shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-square-check text-base"></i><span>已成交店家 (+30 pts)</span>
+                    </button>
+                `;
+            } else {
+                bonusActionEl.innerHTML = `
+                    <button onclick="toggleBonusTask()" class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-white hover:bg-amber-100 text-amber-900 border-2 border-amber-400 font-black text-xs shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-square text-base"></i><span>點選打勾「成交店家」(+30 pts)</span>
+                    </button>
+                `;
+            }
+        }
+
+        function renderTaskBlock(taskNum, item, badgeId, btnsId, cardId, opts) {
+            const badgeEl = document.getElementById(badgeId);
+            const btnsEl = document.getElementById(btnsId);
+            const cardEl = document.getElementById(cardId);
+
+            if (item) {
+                cardEl.className = 'bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-emerald-400 transition-all';
+                badgeEl.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-black text-xs">
+                            ${item.time} 打卡 (+${item.points} pts)
+                        </span>
+                        <button onclick="clearTaskOption(${taskNum})" class="text-xs text-gray-400 hover:text-rose-500 underline font-bold">重選</button>
+                    </div>
+                `;
+            } else {
+                cardEl.className = 'bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel transition-all';
+                badgeEl.innerHTML = `<span class="px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 font-bold text-xs">未打卡</span>`;
+            }
+
+            btnsEl.innerHTML = opts.map(opt => {
+                const isSelected = item && item.choice === opt.key;
+                if (isSelected) {
+                    return `
+                        <button onclick="clearTaskOption(${taskNum})" class="p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center"><i class="fa-solid fa-check"></i></div>
+                                <div><p class="font-black text-emerald-950 text-sm">${opt.title}</p><p class="text-[11px] text-emerald-700">${item.time} 已完成</p></div>
+                            </div>
+                            <span class="px-2 py-1 rounded-xl bg-emerald-500 text-white font-black text-xs">+${item.points} pts</span>
+                        </button>
+                    `;
+                }
+                return `
+                    <button onclick="selectTaskOption(${taskNum}, '${opt.key}')" class="p-4 rounded-2xl border-2 border-panda-pastel hover:border-panda bg-white hover:bg-panda-soft/40 text-left flex items-center justify-between transition-all">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-panda-soft text-panda flex items-center justify-center"><i class="fa-solid ${opt.icon}"></i></div>
+                            <div><p class="font-black text-panda-charcoal text-sm">${opt.title}</p><p class="text-[11px] text-gray-400">${opt.sub}</p></div>
+                        </div>
+                        <span class="px-2 py-1 rounded-xl ${opt.pts > 0 ? 'bg-panda-soft text-panda' : 'bg-gray-100 text-gray-500'} font-black text-xs">+${opt.pts} pts</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function changeMonth(delta) {
+            viewingMonth += delta;
+            if (viewingMonth < 0) { viewingMonth = 11; viewingYear--; }
+            else if (viewingMonth > 11) { viewingMonth = 0; viewingYear++; }
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            document.getElementById('calendarMonthTitle').textContent = `${viewingYear}年 ${viewingMonth + 1}月`;
+            const firstDay = new Date(viewingYear, viewingMonth, 1).getDay();
+            const daysInMonth = new Date(viewingYear, viewingMonth + 1, 0).getDate();
+            const todayKey = getTodayKey();
+
+            let monthPts = 0, monthStars = 0, monthOffWork = 0;
+            let html = '';
+
+            for (let i = 0; i < firstDay; i++) {
+                html += `<div class="h-14 sm:h-16 rounded-2xl bg-gray-50/50"></div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateKey = formatDateKey(new Date(viewingYear, viewingMonth, day));
+                const rec = appData.days[dateKey];
+                const pts = getDayTotalPoints(rec);
+                const hasStar = Boolean(rec?.starEarned);
+                const hasVoucher = Boolean(rec?.offWorkRedeemed);
+                const isToday = dateKey === todayKey;
+
+                monthPts += pts;
+                if (hasStar) monthStars++;
+                if (hasVoucher) monthOffWork++;
+
+                html += `
+                    <button onclick="inspectDate('${dateKey}')" class="h-14 sm:h-16 rounded-2xl p-1 border text-left flex flex-col justify-between ${dateKey === selectedDateKey ? 'border-panda bg-panda-soft ring-2 ring-panda/20' : 'border-panda-pastel/60 bg-white hover:border-panda'}">
+                        <div class="flex items-center justify-between w-full">
+                            <span class="text-[11px] font-black ${isToday ? 'w-4 h-4 rounded-full bg-panda text-white flex items-center justify-center text-[10px]' : 'text-panda-charcoal'}">${day}</span>
+                            <div class="flex gap-0.5 text-[10px]">
+                                ${hasStar ? '⭐' : ''}
+                                ${hasVoucher ? '🛵' : ''}
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            ${pts > 0 ? `<span class="inline-block w-full text-center py-0.2 rounded bg-panda text-white font-black text-[9px]">${pts} pts</span>` : ''}
+                        </div>
+                    </button>
+                `;
+            }
+            document.getElementById('calendarGrid').innerHTML = html;
+            document.getElementById('monthTotalPoints').textContent = monthPts;
+            document.getElementById('monthTotalStars').textContent = monthStars;
+            document.getElementById('monthTotalOffWork').textContent = monthOffWork;
+            document.getElementById('monthTotalWeekend').textContent = appData.weekendVouchers.length;
+        }
+
+        function inspectDate(dateKey) {
+            selectedDateKey = dateKey;
+            renderCalendar();
+            renderInspector();
+        }
+
+        function renderInspector() {
+            if (!selectedDateKey) selectedDateKey = getTodayKey();
+            const rec = appData.days[selectedDateKey];
+            const pts = getDayTotalPoints(rec);
+            document.getElementById('selectedDateTitle').textContent = `${selectedDateKey.replace(/-/g, '/')} 明細`;
+            document.getElementById('selectedDatePointsPill').textContent = `${pts} pts`;
+
+            const box = document.getElementById('selectedDateDetailBox');
+            if (!rec || (!rec.t1 && !rec.t2 && !rec.t3 && !rec.bonus)) {
+                box.innerHTML = `<p class="text-center py-3 text-gray-400 font-bold">🐾 本日尚無打卡紀錄</p>`;
+                return;
+            }
+            box.innerHTML = `
+                <div class="flex justify-between"><span>任務一：gosubar訊息回覆</span><span class="font-bold">${rec.t1 ? `${rec.t1.label} (+${rec.t1.points} pts)` : '未完成'}</span></div>
+                <div class="flex justify-between"><span>任務二：case處理</span><span class="font-bold">${rec.t2 ? `${rec.t2.label} (+${rec.t2.points} pts)` : '未完成'}</span></div>
+                <div class="flex justify-between"><span>任務三：新店家聯繫</span><span class="font-bold">${rec.t3 ? `${rec.t3.label} (+${rec.t3.points} pts)` : '未完成'}</span></div>
+                <div class="flex justify-between"><span>成交店家加分</span><span class="font-bold ${rec.bonus ? 'text-amber-600' : 'text-gray-400'}">${rec.bonus ? '+30 pts' : '無'}</span></div>
+                <div class="flex justify-between pt-1 border-t border-pink-200/40">
+                    <span class="text-panda font-bold">榮譽狀態</span>
+                    <span>${rec.starEarned ? '⭐ 完賽星 ' : ''}${rec.offWorkRedeemed ? '🛵 準時下班券' : ''}</span>
+                </div>
+            `;
+        }
+
+        function renderWallet() {
+            const listEl = document.getElementById('voucherWalletList');
+            const items = [];
+
+            Object.keys(appData.days).sort().reverse().forEach(dateKey => {
+                const rec = appData.days[dateKey];
+                if (rec && rec.offWorkRedeemed) {
+                    items.push({
+                        type: 'offwork',
+                        title: '🛵 心安理得準時下班券',
+                        dateStr: `${dateKey} ${rec.offWorkTime || ''}`,
+                        serial: rec.offWorkSerial || 'OFF-8888',
+                        costStr: '60 Points 兌換'
+                    });
+                }
+            });
+
+            appData.weekendVouchers.slice().reverse().forEach(v => {
+                items.push({
+                    type: 'weekend',
+                    title: '🏖️ 週末愉快休假券',
+                    dateStr: v.dateIssued,
+                    serial: v.serial,
+                    costStr: '當週 5 顆星兌換'
+                });
+            });
+
+            if (appData.monthlyAmc.allPassRedeemed) {
+                items.unshift({
+                    type: 'allpass',
+                    title: '👼 All Pass 祝福券',
+                    dateStr: appData.monthlyAmc.allPassTime || getTodayKey(),
+                    serial: appData.monthlyAmc.allPassSerial || 'ALLPASS-9999',
+                    costStr: '當月 3 頂學士帽兌換'
+                });
+            }
+
+            document.getElementById('walletCountText').textContent = `共 ${items.length} 張`;
+            if (items.length === 0) {
+                listEl.innerHTML = `<div class="text-center py-3 text-xs text-gray-400 bg-gray-50 rounded-2xl">尚無票券，滿分或集星即可獲得！</div>`;
+                return;
+            }
+
+            listEl.innerHTML = items.map((item, idx) => `
+                <button onclick="reopenWalletVoucher(${idx})" class="w-full p-2.5 rounded-2xl bg-panda-soft/50 hover:bg-panda-soft border border-panda-pastel flex items-center justify-between text-left transition-all">
+                    <div>
+                        <p class="text-xs font-black text-panda-charcoal">${item.title}</p>
+                        <p class="text-[10px] text-gray-500">${item.dateStr}</p>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-xl bg-white text-panda font-bold text-[11px] shadow-sm">
+                        出示 / 動畫 <i class="fa-solid fa-play ml-0.5"></i>
+                    </span>
+                </button>
+            `).join('');
+
+            window.__walletItems = items;
+        }
+
+        function reopenWalletVoucher(idx) {
+            const item = window.__walletItems && window.__walletItems[idx];
+            if (!item) return;
+            if (item.type === 'offwork') {
+                openVoucherModal({
+                    type: 'offwork',
+                    title: '心安理得準時下班券',
+                    subtitle: 'DAILY OFF-WORK PASS',
+                    tag: '60 PTS 認證兌換',
+                    icon: '🛵',
+                    desc: '今日三項任務已全部完成且達 60 points！Pau-Pau 核准你今天準時關電腦、騎機車心安理得下班回家！',
+                    dateStr: item.dateStr,
+                    costStr: item.costStr,
+                    serial: `#${item.serial}`
+                });
+            } else if (item.type === 'weekend') {
+                openVoucherModal({
+                    type: 'weekend',
+                    title: '週末愉快休假券',
+                    subtitle: '5-STAR WEEKLY PASS',
+                    tag: '⭐⭐⭐⭐⭐ 滿星榮耀',
+                    icon: '🏖️',
+                    desc: '太棒了！本週連續在 17:00 前完成所有任務，集滿 5 顆星！快使用這張票券，看 Pau-Pau 出去郊遊野餐！',
+                    dateStr: item.dateStr,
+                    costStr: item.costStr,
+                    serial: `#${item.serial}`
+                });
+            } else if (item.type === 'allpass') {
+                openVoucherModal({
+                    type: 'allpass',
+                    title: 'All Pass 祝福券',
+                    subtitle: 'MONTHLY AMC PASS',
+                    tag: '🎓 3頂學士帽榮耀',
+                    icon: '👼',
+                    desc: '當月 15號/20號/25號 AMC 里程碑全滿達標！Pau-Pau 化身天使降臨，送上滿滿萬事 All Pass 祝福！',
+                    dateStr: item.dateStr,
+                    costStr: item.costStr,
+                    serial: `#${item.serial}`
+                });
+            }
+        }
+
+        /* Voucher Modal Display */
+        function openVoucherModal(cfg) {
+            document.getElementById('voucherModalTitle').textContent = cfg.title;
+            document.getElementById('voucherModalSubtitle').textContent = cfg.subtitle;
+            document.getElementById('voucherModalTag').textContent = cfg.tag;
+            document.getElementById('voucherIconBox').textContent = cfg.icon;
+            document.getElementById('voucherModalDesc').textContent = cfg.desc;
+            document.getElementById('voucherHolderName').textContent = appData.userName || '小熊夥伴';
+            document.getElementById('voucherIssueDate').textContent = cfg.dateStr;
+            document.getElementById('voucherCostInfo').textContent = cfg.costStr;
+            document.getElementById('voucherSerial').textContent = cfg.serial;
+
+            const badgeEl = document.getElementById('voucherStampBadge');
+            let actionText = '';
+
+            if (cfg.type === 'offwork') {
+                badgeEl.textContent = '🐾 胖胖達核准準時下班';
+                actionText = '🛵 騎機車下班回家！';
+            } else if (cfg.type === 'weekend') {
+                badgeEl.textContent = '🏖️ 胖胖達核准愉快休假';
+                actionText = '🌸 Pau-Pau 出去野餐！';
+            } else if (cfg.type === 'allpass') {
+                badgeEl.textContent = '✨ 天使胖胖達神級祝福';
+                actionText = '👼 召喚天使 Pau-Pau！';
+            }
+
+            document.getElementById('voucherActionBtnText').textContent = actionText;
+            document.getElementById('voucherActionBtn').onclick = function() {
+                closeVoucherModal();
+                if (cfg.type === 'offwork') openScooterModal();
+                else if (cfg.type === 'weekend') openPicnicModal();
+                else if (cfg.type === 'allpass') openAngelModal();
+            };
+
+            document.getElementById('voucherModal').classList.remove('hidden');
+        }
+
+        function closeVoucherModal() {
+            document.getElementById('voucherModal').classList.add('hidden');
+        }
+
+        /* 3 Animated Modals */
+        function openScooterModal() {
+            document.getElementById('scooterHolderName').textContent = appData.userName || '小熊夥伴';
+            confetti({ particleCount: 80, spread: 100 });
+            document.getElementById('scooterModal').classList.remove('hidden');
+        }
+        function closeScooterModal() {
+            document.getElementById('scooterModal').classList.add('hidden');
+        }
+
+        function openPicnicModal() {
+            confetti({ particleCount: 90, spread: 90 });
+            document.getElementById('picnicModal').classList.remove('hidden');
+        }
+        function closePicnicModal() {
+            document.getElementById('picnicModal').classList.add('hidden');
+        }
+
+        function openAngelModal() {
+            document.getElementById('angelHolderName').textContent = appData.userName || '小熊夥伴';
+            confetti({
+                particleCount: 120,
+                spread: 120,
+                origin: { y: 0.4 },
+                colors: ['#FBBF24', '#FDE047', '#EC4899', '#FFFFFF']
+            });
+            document.getElementById('angelModal').classList.remove('hidden');
+        }
+        function closeAngelModal() {
+            document.getElementById('angelModal').classList.add('hidden');
+        }
+
+        function pokePauPau() {
+            triggerMascotCheer();
+            const quotes = [
+                '加油加油！完成三項每日任務 + 成交加分，輕鬆達標 60 分換機車下班券！🛵',
+                '記得在下午 5:00 前完成所有任務，就可以拿到金光閃閃的星星 ⭐！',
+                '今天有新成交店家嗎？隨時打勾加 30 points，超有成就感！🌟',
+                '每月任務 AMC 集滿 3 頂學士帽，天使 Pau-Pau 會為你降臨祝福喔！👼'
+            ];
+            document.getElementById('pauSpeechText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+        }
+        function triggerMascotCheer() {
+            const el = document.getElementById('pauMascotContainer');
+            el.classList.remove('pau-cheer');
+            void el.offsetWidth;
+            el.classList.add('pau-cheer');
+        }
+
+        let isMarathon = false;
+        function togglePauOutfit(e) {
+            if (e) e.stopPropagation();
+            isMarathon = !isMarathon;
+            document.getElementById('pauSvgClassic').classList.toggle('hidden', isMarathon);
+            document.getElementById('pauSvgMarathon').classList.toggle('hidden', !isMarathon);
+            document.getElementById('pauSpeechText').textContent = isMarathon ? '換上馬拉松 #188 戰袍！全力衝刺準時下班！🏃💨' : '換回經典揮手造型！看到手上的白肉球了嗎？🐾';
+            triggerMascotCheer();
+        }
+
+        /* 
+           ===== 優化番茄鐘：支援背景計時 + Web Audio API 提示音效 ===== 
+        */
+        let pomoMode = 'work';
+        let pomoTotalSeconds = 25 * 60;
+        let pomoSeconds = 25 * 60;
+        let pomoTimerId = null;
+        let pomoEndTime = null;
+        let pomoAudioCtx = null;
+
+        // 初始化與解鎖瀏覽器音訊引擎
+        function ensureAudioContext() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return null;
+                if (!pomoAudioCtx) {
+                    pomoAudioCtx = new AudioCtx();
+                }
+                if (pomoAudioCtx.state === 'suspended') {
+                    pomoAudioCtx.resume();
+                }
+                return pomoAudioCtx;
+            } catch (e) {
+                console.warn('Web Audio API 無法啟動:', e);
+                return null;
+            }
+        }
+
+        // 播放清脆鈴聲（mode = 'work' 為過關和弦鈴聲，'break' 為收心雙響鈴）
+        function playPomodoroAlarm(mode = 'work') {
+            const ctx = ensureAudioContext();
+            if (!ctx) return;
+
+            const now = ctx.currentTime;
+            // 專注完成：C5 - E5 - G5 - C6 (重複兩次)；休息結束：G5 - E5 - G5 - C6
+            const melody = mode === 'work'
+                ? [
+                    { f: 523.25, t: 0.0, d: 0.14 },
+                    { f: 659.25, t: 0.15, d: 0.14 },
+                    { f: 783.99, t: 0.30, d: 0.14 },
+                    { f: 1046.50, t: 0.45, d: 0.35 },
+                    { f: 523.25, t: 0.95, d: 0.14 },
+                    { f: 659.25, t: 1.10, d: 0.14 },
+                    { f: 783.99, t: 1.25, d: 0.14 },
+                    { f: 1046.50, t: 1.40, d: 0.45 }
+                  ]
+                : [
+                    { f: 783.99, t: 0.0, d: 0.16 },
+                    { f: 659.25, t: 0.18, d: 0.16 },
+                    { f: 783.99, t: 0.45, d: 0.16 },
+                    { f: 1046.50, t: 0.63, d: 0.40 }
+                  ];
+
+            melody.forEach(note => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(note.f, now + note.t);
+
+                gain.gain.setValueAtTime(0.001, now + note.t);
+                gain.gain.linearRampToValueAtTime(0.28, now + note.t + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + note.t + note.d);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(now + note.t);
+                osc.stop(now + note.t + note.d + 0.02);
+            });
+        }
+
+        function testPomodoroSound() {
+            playPomodoroAlarm(pomoMode);
+            showToast('🔔 正在播放番茄鐘提示音效！', 'info');
+        }
+
+        function updatePomoDisplay() {
+            const m = String(Math.floor(pomoSeconds / 60)).padStart(2, '0');
+            const s = String(pomoSeconds % 60).padStart(2, '0');
+            const disp = document.getElementById('pomoTimeDisplay');
+            if (disp) disp.textContent = `${m}:${s}`;
+        }
+
+        function switchPomoMode(mode) {
+            pomoMode = mode;
+            if (pomoTimerId) {
+                clearInterval(pomoTimerId);
+                pomoTimerId = null;
+            }
+            pomoEndTime = null;
+            pomoTotalSeconds = mode === 'work' ? 25 * 60 : 5 * 60;
+            pomoSeconds = pomoTotalSeconds;
+            document.getElementById('pomoModeLabel').textContent = mode === 'work' ? '番茄鐘：25分鐘專注' : '番茄鐘：5分鐘休息';
+            document.getElementById('pomoWorkTab').className = mode === 'work'
+                ? 'px-2 py-0.5 rounded-lg text-[10px] font-black bg-white text-panda'
+                : 'px-2 py-0.5 rounded-lg text-[10px] font-bold bg-black/20 text-pink-100 hover:bg-black/30';
+            document.getElementById('pomoBreakTab').className = mode === 'break'
+                ? 'px-2 py-0.5 rounded-lg text-[10px] font-black bg-white text-panda'
+                : 'px-2 py-0.5 rounded-lg text-[10px] font-bold bg-black/20 text-pink-100 hover:bg-black/30';
+            document.getElementById('pomoStartBtn').innerHTML = `<i class="fa-solid fa-play text-[10px]"></i><span>開始</span>`;
+            updatePomoDisplay();
+        }
+
+        function tickPomodoro() {
+            if (!pomoEndTime) return;
+            const now = Date.now();
+            const remaining = Math.round((pomoEndTime - now) / 1000);
+
+            if (remaining > 0) {
+                pomoSeconds = remaining;
+                updatePomoDisplay();
+            } else {
+                const finishedMode = pomoMode;
+                pomoSeconds = 0;
+                updatePomoDisplay();
+                clearInterval(pomoTimerId);
+                pomoTimerId = null;
+                pomoEndTime = null;
+
+                // 觸發完成提示音效與慶祝效果
+                playPomodoroAlarm(finishedMode);
+                confetti({ particleCount: 50, spread: 70 });
+                triggerMascotCheer();
+
+                if (finishedMode === 'work') {
+                    document.getElementById('pauSpeechText').textContent = '太棒了！25分鐘番茄鐘完成！休息 5 分鐘吧！🍅🐾';
+                    showToast('🍅 25分鐘專注完成！Pau-Pau 為你歡呼！', 'success');
+                    switchPomoMode('break');
+                } else {
+                    document.getElementById('pauSpeechText').textContent = '5分鐘休息結束囉！充飽電繼續下一輪任務吧！💪🐾';
+                    showToast('🐾 休息結束！準備開始下一輪專注囉！', 'info');
+                    switchPomoMode('work');
+                }
+            }
+        }
+
+        function togglePomodoro() {
+            // 在使用者點擊「開始」時預先解鎖瀏覽器音效權限
+            ensureAudioContext();
+
+            const btn = document.getElementById('pomoStartBtn');
+            if (pomoTimerId) {
+                clearInterval(pomoTimerId);
+                pomoTimerId = null;
+                pomoEndTime = null;
+                btn.innerHTML = `<i class="fa-solid fa-play text-[10px]"></i><span>繼續</span>`;
+            } else {
+                pomoEndTime = Date.now() + (pomoSeconds * 1000);
+                btn.innerHTML = `<i class="fa-solid fa-pause text-[10px]"></i><span>暫停</span>`;
+                pomoTimerId = setInterval(tickPomodoro, 500);
+            }
+        }
+
+        function resetPomodoro() {
+            switchPomoMode(pomoMode);
+            showToast('🍅 番茄鐘已重設', 'info');
+        }
+
+        // 當使用者從其他分頁切回來時，立即校正最新時間
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && pomoTimerId && pomoEndTime) {
+                tickPomodoro();
+            }
+        });
+        window.addEventListener('focus', () => {
+            if (pomoTimerId && pomoEndTime) {
+                tickPomodoro();
+            }
+        });
+
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            let bg = 'bg-panda-charcoal text-white border-panda';
+            if (type === 'success') bg = 'bg-panda text-white border-pink-300';
+            if (type === 'star') bg = 'bg-amber-400 text-amber-950 border-amber-200';
+            if (type === 'warning') bg = 'bg-rose-600 text-white border-rose-300';
+
+            toast.className = `p-3 rounded-2xl shadow-xl border-2 ${bg} text-xs font-bold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto`;
+            toast.innerHTML = `<span>${msg}</span>`;
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => toast.classList.remove('translate-y-2', 'opacity-0'));
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        window.onload = function() {
+            loadStorage();
+            selectedDateKey = getTodayKey();
+            renderAll();
+            
+            if (!appData.passcodeAuth || !appData.userName) {
+                document.getElementById('gateUserName').value = appData.userName || '';
+                document.getElementById('gatePasscode').value = '';
+                document.getElementById('gatekeeperModal').classList.remove('hidden');
+            } else {
+                document.getElementById('gatekeeperModal').classList.add('hidden');
+            }
+
+            setInterval(() => {
+                if (!simulatedTimeStr) {
+                    renderHeader();
+                    renderDailyTasks();
+                }
+            }, 15000);
+        };
+    </script>
+</body>
+</html>
