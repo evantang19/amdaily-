@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AM每日任務循環與AMC每月挑戰</title>
+    <title>AM每日任務循環與AMC每月挑戰 v3</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Fredoka & Noto Sans TC -->
@@ -138,11 +138,41 @@
             transform-origin: 96px 164px;
             animation: waveHand3D 2.4s ease-in-out infinite;
         }
+
+        /* Stage Backgrounds for Pau-Pau */
+        .stage-classic {
+            background: #FFFFFF;
+        }
+        .stage-sakura {
+            background: linear-gradient(160deg, #FFF0F6 0%, #FFD6E7 55%, #FFE4E6 100%);
+        }
+        .stage-gold {
+            background: radial-gradient(circle at 50% 35%, #FEF9C3 0%, #FDE68A 60%, #F59E0B 100%);
+        }
+        .stage-night {
+            background: linear-gradient(160deg, #1E1B4B 0%, #311042 60%, #701A75 100%);
+        }
+        .stage-meadow {
+            background: linear-gradient(180deg, #E0F2FE 0%, #DCFCE7 65%, #86EFAC 100%);
+        }
+
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #FFF0F6;
+            border-radius: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #F472B6;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body class="min-h-screen pb-20 selection:bg-panda selection:text-white">
 
-    <!-- SHARED 3D PLUSH PAU-PAU SVG DEFS -->
+    <!-- SHARED 3D PLUSH PAU-PAU & OUTFIT SVG DEFS -->
     <svg width="0" height="0" class="absolute pointer-events-none" aria-hidden="true">
         <defs>
             <radialGradient id="pauHeadGrad" cx="46%" cy="38%" r="58%" fx="42%" fy="32%">
@@ -186,6 +216,7 @@
                 <feDropShadow dx="0" dy="5" stdDeviation="3.5" flood-color="#5A0326" flood-opacity="0.32"/>
             </filter>
 
+            <!-- Base Figure -->
             <g id="PauPau3DFigure">
                 <g filter="url(#floorShadowBlur)" opacity="0.82">
                     <ellipse cx="136" cy="257" rx="82" ry="12.5" fill="#F782B2"/>
@@ -233,6 +264,194 @@
                 <path d="M 122 121.5 C 124 117.5 128 118 130 120 C 132 118 136 117.5 138 121.5 C 139 126.5 135 129.5 130 129.5 C 125 129.5 121 126.5 122 121.5 Z" fill="#C81058"/>
             </g>
 
+            <!-- OUTFIT LAYER DEFS -->
+            <!-- 1. Body Outfits -->
+            <g id="outfit-marathon">
+                <rect x="103" y="168" width="54" height="36" rx="3.5" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+                <rect x="103" y="168" width="54" height="9.5" rx="2" fill="#D70F64"/>
+                <text x="130" y="175" text-anchor="middle" fill="#FFFFFF" font-size="6" font-weight="900">foodpanda</text>
+                <text x="130" y="196" text-anchor="middle" fill="#181516" font-size="18" font-weight="900" font-family="monospace">188</text>
+            </g>
+
+            <g id="outfit-suit">
+                <!-- Suit Jacket -->
+                <path d="M97 148 Q130 156 163 148 L162 214 Q130 220 98 214 Z" fill="#1E293B"/>
+                <!-- White Shirt V-neck -->
+                <polygon points="116,150 144,150 130,192" fill="#FFFFFF"/>
+                <!-- Lapels -->
+                <polygon points="115,150 105,168 130,192" fill="#334155"/>
+                <polygon points="145,150 155,168 130,192" fill="#334155"/>
+                <!-- Pink Tie -->
+                <polygon points="127,154 133,154 135,186 130,193 125,186" fill="#FF2B85"/>
+                <rect x="126.5" y="152" width="7" height="4.5" rx="1" fill="#D70F64"/>
+                <!-- Gold Name Badge -->
+                <rect x="140" y="172" width="15" height="7" rx="1.5" fill="#FBBF24" stroke="#FEF08A" stroke-width="0.8"/>
+                <text x="147.5" y="177" text-anchor="middle" fill="#78350F" font-size="4.5" font-weight="900">MVP</text>
+            </g>
+
+            <g id="outfit-hoodie">
+                <path d="M96 146 Q130 155 164 146 L163 213 Q130 221 97 213 Z" fill="#FF2B85" stroke="#9E0B49" stroke-width="1"/>
+                <!-- Kangaroo Pocket -->
+                <path d="M107 186 L153 186 L157 207 Q130 211 103 207 Z" fill="#D70F64"/>
+                <!-- Drawstrings -->
+                <path d="M122 153 Q120 168 122 175" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+                <path d="M138 153 Q140 168 138 175" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+                <circle cx="122" cy="176" r="2" fill="#FFFFFF"/>
+                <circle cx="138" cy="176" r="2" fill="#FFFFFF"/>
+                <!-- Center Logo -->
+                <circle cx="130" cy="172" r="8" fill="#FFFFFF"/>
+                <text x="130" y="175" text-anchor="middle" fill="#D70F64" font-size="8" font-weight="900">🐾</text>
+            </g>
+
+            <g id="outfit-cape">
+                <!-- Hero Cape Behind/Sides -->
+                <path d="M96 148 L76 232 Q130 242 184 232 L164 148 Z" fill="#DC2626" opacity="0.92"/>
+                <path d="M98 148 Q130 158 162 148" stroke="#FBBF24" stroke-width="4" fill="none"/>
+                <!-- Star Emblem on Chest -->
+                <circle cx="130" cy="178" r="14" fill="#FBBF24" stroke="#FEF08A" stroke-width="2"/>
+                <polygon points="130,167 133,174 141,174 135,179 137,186 130,182 123,186 125,179 119,174 127,174" fill="#DC2626"/>
+            </g>
+
+            <g id="outfit-apron">
+                <!-- Straps -->
+                <rect x="108" y="146" width="6" height="22" fill="#047857"/>
+                <rect x="146" y="146" width="6" height="22" fill="#047857"/>
+                <!-- Apron Body -->
+                <path d="M101 162 L159 162 L161 212 Q130 218 99 212 Z" fill="#059669" stroke="#065F46" stroke-width="1"/>
+                <rect x="114" y="182" width="32" height="19" rx="3" fill="#047857" stroke="#34D399" stroke-width="0.8"/>
+                <circle cx="130" cy="173" r="5.5" fill="#FFFFFF"/>
+                <text x="130" y="175.5" text-anchor="middle" fill="#059669" font-size="6.5" font-weight="900">☕</text>
+            </g>
+
+            <!-- 2. Hats / Headwear -->
+            <g id="hat-crown">
+                <path d="M98 40 L105 14 L118 28 L130 8 L142 28 L155 14 L162 40 Z" fill="#FBBF24" stroke="#D97706" stroke-width="2" stroke-linejoin="round"/>
+                <rect x="98" y="38" width="64" height="7" rx="3" fill="#F59E0B" stroke="#B45309" stroke-width="1"/>
+                <circle cx="130" cy="27" r="3.5" fill="#E11D48"/>
+                <circle cx="112" cy="31" r="2.8" fill="#3B82F6"/>
+                <circle cx="148" cy="31" r="2.8" fill="#3B82F6"/>
+                <circle cx="105" cy="13" r="2.5" fill="#FEF08A"/>
+                <circle cx="130" cy="7" r="3" fill="#FEF08A"/>
+                <circle cx="155" cy="13" r="2.5" fill="#FEF08A"/>
+            </g>
+
+            <g id="hat-strawhat">
+                <ellipse cx="130" cy="36" rx="54" ry="13" fill="#FDE047" stroke="#CA8A04" stroke-width="1.8"/>
+                <path d="M96 34 C96 10, 164 10, 164 34 Z" fill="#FACC15" stroke="#CA8A04" stroke-width="1.5"/>
+                <path d="M97 31 Q130 38 163 31" stroke="#D70F64" stroke-width="5" fill="none"/>
+                <circle cx="152" cy="33" r="4.5" fill="#FF2B85"/>
+            </g>
+
+            <g id="hat-gradcap">
+                <polygon points="130,8 78,26 130,42 182,26" fill="#1E293B" stroke="#FBBF24" stroke-width="1.5"/>
+                <path d="M104 34 L104 46 Q130 53 156 46 L156 34" fill="#334155"/>
+                <circle cx="130" cy="25" r="3.5" fill="#FBBF24"/>
+                <path d="M130 25 Q158 30 168 48" stroke="#FBBF24" stroke-width="2.5" fill="none"/>
+                <rect x="165" y="46" width="6" height="10" rx="1.5" fill="#F59E0B"/>
+            </g>
+
+            <g id="hat-helmet">
+                <path d="M78 55 C78 14, 182 14, 182 55 Z" fill="#FF2B85" stroke="#9E0B49" stroke-width="2"/>
+                <rect x="92" y="38" width="76" height="14" rx="6" fill="#38BDF8" opacity="0.85" stroke="#FFFFFF" stroke-width="1.5"/>
+                <rect x="116" y="20" width="28" height="11" rx="3" fill="#FFFFFF"/>
+                <text x="130" y="28" text-anchor="middle" fill="#D70F64" font-size="6.5" font-weight="900">panda</text>
+            </g>
+
+            <g id="hat-headband">
+                <path d="M68 58 Q130 44 192 58" stroke="#FFFFFF" stroke-width="11" stroke-linecap="round" fill="none"/>
+                <path d="M68 58 Q130 44 192 58" stroke="#E11D48" stroke-width="5" stroke-dasharray="10 6" stroke-linecap="round" fill="none"/>
+                <circle cx="130" cy="51" r="8" fill="#E11D48" stroke="#FFFFFF" stroke-width="1.5"/>
+                <text x="130" y="54" text-anchor="middle" fill="#FFFFFF" font-size="7" font-weight="900">必勝</text>
+            </g>
+
+            <g id="hat-bow">
+                <g transform="translate(88, 34) rotate(-18)">
+                    <path d="M0 0 C-22 -16, -26 16, 0 4 Z" fill="#FF2B85" stroke="#9E0B49" stroke-width="1.5"/>
+                    <path d="M4 0 C26 -16, 30 16, 4 4 Z" fill="#FF2B85" stroke="#9E0B49" stroke-width="1.5"/>
+                    <circle cx="2" cy="2" r="5.5" fill="#FBBF24" stroke="#9E0B49" stroke-width="1.2"/>
+                </g>
+            </g>
+
+            <!-- 3. Eyewear / Face -->
+            <g id="face-sunglasses">
+                <line x1="68" y1="82" x2="192" y2="82" stroke="#111827" stroke-width="3.5"/>
+                <rect x="78" y="74" width="44" height="24" rx="6" fill="#0F172A" stroke="#FBBF24" stroke-width="2"/>
+                <rect x="138" y="74" width="44" height="24" rx="6" fill="#0F172A" stroke="#FBBF24" stroke-width="2"/>
+                <line x1="84" y1="92" x2="98" y2="78" stroke="#FFFFFF" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+                <line x1="144" y1="92" x2="158" y2="78" stroke="#FFFFFF" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+            </g>
+
+            <g id="face-glasses">
+                <circle cx="101" cy="86" r="20" fill="rgba(255,255,255,0.15)" stroke="#FBBF24" stroke-width="3"/>
+                <circle cx="159" cy="86" r="20" fill="rgba(255,255,255,0.15)" stroke="#FBBF24" stroke-width="3"/>
+                <path d="M121 86 Q130 81 139 86" stroke="#FBBF24" stroke-width="3" fill="none"/>
+            </g>
+
+            <g id="face-star_glasses">
+                <line x1="118" y1="86" x2="142" y2="86" stroke="#F59E0B" stroke-width="3"/>
+                <polygon points="101,64 106,78 121,78 109,87 114,101 101,92 88,101 93,87 81,78 96,78" fill="rgba(244,63,94,0.75)" stroke="#FDE047" stroke-width="2"/>
+                <polygon points="159,64 164,78 179,78 167,87 172,101 159,92 146,101 151,87 139,78 154,78" fill="rgba(244,63,94,0.75)" stroke="#FDE047" stroke-width="2"/>
+            </g>
+
+            <g id="face-blush">
+                <ellipse cx="78" cy="108" rx="13" ry="7.5" fill="#FB7185" opacity="0.65"/>
+                <ellipse cx="182" cy="108" rx="13" ry="7.5" fill="#FB7185" opacity="0.65"/>
+                <text x="74" y="111" font-size="9">💗</text>
+                <text x="178" y="111" font-size="9">💗</text>
+            </g>
+
+            <!-- 4. Hand Props -->
+            <g id="prop-boba">
+                <g class="pau-wave-arm">
+                    <!--Straw-->
+                    <line x1="45" y1="86" x2="49" y2="125" stroke="#D70F64" stroke-width="4.5" stroke-linecap="round"/>
+                    <!--Cup-->
+                    <polygon points="34,102 60,102 56,136 38,136" fill="#FDE68A" stroke="#92400E" stroke-width="1.5"/>
+                    <ellipse cx="47" cy="102" rx="14" ry="3.5" fill="#FFFFFF" stroke="#92400E" stroke-width="1.2"/>
+                    <!--Pearls-->
+                    <circle cx="42" cy="131" r="2.3" fill="#1C1917"/>
+                    <circle cx="47" cy="132" r="2.3" fill="#1C1917"/>
+                    <circle cx="52" cy="131" r="2.3" fill="#1C1917"/>
+                    <circle cx="44" cy="126" r="2.3" fill="#1C1917"/>
+                    <circle cx="50" cy="127" r="2.3" fill="#1C1917"/>
+                </g>
+            </g>
+
+            <g id="prop-coffee">
+                <g class="pau-wave-arm">
+                    <polygon points="35,104 59,104 55,134 39,134" fill="#FFFFFF" stroke="#475569" stroke-width="1.5"/>
+                    <polygon points="36,113 58,113 56,125 38,125" fill="#D70F64"/>
+                    <rect x="33" y="99" width="28" height="5" rx="2" fill="#1E293B"/>
+                    <path d="M43 94 Q45 88 43 84" stroke="#94A3B8" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                    <path d="M50 94 Q52 88 50 84" stroke="#94A3B8" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                </g>
+            </g>
+
+            <g id="prop-megaphone">
+                <g class="pau-wave-arm">
+                    <polygon points="56,118 22,98 22,132" fill="#EF4444" stroke="#FFFFFF" stroke-width="1.5"/>
+                    <rect x="46" y="120" width="6" height="14" rx="2" transform="rotate(15 46 120)" fill="#1E293B"/>
+                    <path d="M15 104 Q8 115 15 126" stroke="#FBBF24" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M9 98 Q0 115 9 132" stroke="#FBBF24" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                </g>
+            </g>
+
+            <g id="prop-wand">
+                <g class="pau-wave-arm">
+                    <line x1="56" y1="124" x2="32" y2="90" stroke="#F59E0B" stroke-width="4" stroke-linecap="round"/>
+                    <polygon points="32,76 36,86 47,86 38,92 41,102 32,96 23,102 26,92 17,86 28,86" fill="#FEF08A" stroke="#F59E0B" stroke-width="1.5"/>
+                </g>
+            </g>
+
+            <g id="prop-trophy">
+                <g class="pau-wave-arm">
+                    <path d="M34 98 L58 98 L54 118 Q46 125 38 118 Z" fill="#FBBF24" stroke="#B45309" stroke-width="1.5"/>
+                    <rect x="43" y="121" width="6" height="8" fill="#D97706"/>
+                    <rect x="37" y="129" width="18" height="5" rx="1.5" fill="#78350F"/>
+                    <text x="46" y="112" text-anchor="middle" fill="#78350F" font-size="8" font-weight="900">1</text>
+                </g>
+            </g>
+
             <g id="AngelWing">
                 <path d="M 0 0 C -40 -30, -90 -30, -110 10 C -120 30, -110 60, -90 80 C -80 70, -75 50, -60 40 C -70 60, -60 90, -40 100 C -35 80, -25 60, -10 50 C -15 75, 5 95, 20 90 C 10 70, 5 40, 0 0 Z" 
                       fill="url(#angelWingGrad)" filter="drop-shadow(0 4px 8px rgba(253, 224, 71, 0.4))"/>
@@ -262,6 +481,7 @@
             <div class="w-36 h-36 mx-auto mb-2 pau-float">
                 <svg viewBox="0 0 260 275" class="w-full h-full">
                     <use href="#PauPau3DFigure"/>
+                    <g class="custom-outfit-target"></g>
                 </svg>
             </div>
 
@@ -318,6 +538,113 @@
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- 1B. PAU-PAU WARDROBE / PERSONALIZED DRESS-UP MODAL -->
+    <div id="wardrobeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-panda-charcoal/80 backdrop-blur-md p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-3xl w-full p-5 sm:p-7 shadow-2xl border-4 border-panda-pastel relative overflow-hidden max-h-[92vh] flex flex-col">
+            <!-- Header -->
+            <div class="flex items-center justify-between border-b border-panda-pastel pb-3.5 mb-4">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-10 h-10 rounded-2xl bg-panda text-white flex items-center justify-center text-lg shadow-md">
+                        👗
+                    </span>
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-black text-panda-charcoal">Pau-Pau 個人化造型更衣室</h3>
+                        <p class="text-xs text-gray-500">自由搭配頭飾、眼鏡、服裝、手持道具與舞台背景，打造專屬胖胖達！</p>
+                    </div>
+                </div>
+                <button onclick="closeWardrobeModal()" class="w-9 h-9 rounded-xl bg-panda-soft hover:bg-panda-pastel text-panda flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Body Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 overflow-y-auto custom-scroll pr-1">
+                <!-- Left 5 Cols: Live Preview & Quick Presets -->
+                <div class="md:col-span-5 flex flex-col items-center justify-between bg-panda-soft/50 rounded-3xl p-4 border-2 border-panda-pastel">
+                    <div class="w-full flex items-center justify-between mb-2">
+                        <span class="px-2.5 py-0.5 rounded-full bg-white text-panda font-black text-[11px] border border-panda-pastel">
+                            ✨ 即時預覽
+                        </span>
+                        <button onclick="randomizePauOutfit()" class="px-3 py-1 rounded-xl bg-panda text-white font-black text-xs hover:bg-panda-dark transition-all shadow-sm flex items-center gap-1">
+                            <i class="fa-solid fa-dice"></i><span>隨機驚喜穿搭</span>
+                        </button>
+                    </div>
+
+                    <!-- Preview Stage -->
+                    <div id="wardrobePreviewStage" class="w-48 h-52 rounded-3xl p-2 shadow-inner border-2 border-pink-200 relative overflow-hidden flex items-center justify-center stage-classic my-2">
+                        <div id="wardrobeStageDecor" class="absolute inset-0 pointer-events-none"></div>
+                        <svg viewBox="0 0 260 275" class="w-full h-full relative z-10 pau-float">
+                            <use href="#PauPau3DFigure"/>
+                            <g class="custom-outfit-target"></g>
+                        </svg>
+                    </div>
+
+                    <!-- Quick Theme Presets -->
+                    <div class="w-full mt-2">
+                        <p class="text-[11px] font-black text-gray-500 mb-1.5 text-center">⚡ 一鍵套用主題套裝</p>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <button onclick="applyOutfitPreset('classic')" class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-panda-pastel/50 border border-panda-pastel text-xs font-bold text-panda-charcoal transition-all">
+                                🐾 經典原味
+                            </button>
+                            <button onclick="applyOutfitPreset('mvp')" class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-panda-pastel/50 border border-panda-pastel text-xs font-bold text-panda-charcoal transition-all">
+                                👑 王牌業務AM
+                            </button>
+                            <button onclick="applyOutfitPreset('runner')" class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-panda-pastel/50 border border-panda-pastel text-xs font-bold text-panda-charcoal transition-all">
+                                🏃 衝刺馬拉松
+                            </button>
+                            <button onclick="applyOutfitPreset('chill')" class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-panda-pastel/50 border border-panda-pastel text-xs font-bold text-panda-charcoal transition-all">
+                                🧋 珍奶渡假風
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 7 Cols: Category Selectors -->
+                <div class="md:col-span-7 space-y-4 text-left">
+                    <!-- 1. Headwear -->
+                    <div>
+                        <label class="block text-xs font-black text-panda-charcoal mb-1.5">👑 頭飾配件 (Headwear)</label>
+                        <div id="wardrobeHatOptions" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
+                    </div>
+
+                    <!-- 2. Eyewear / Face -->
+                    <div>
+                        <label class="block text-xs font-black text-panda-charcoal mb-1.5">😎 眼鏡與臉部 (Face & Glasses)</label>
+                        <div id="wardrobeFaceOptions" class="grid grid-cols-3 sm:grid-cols-5 gap-2"></div>
+                    </div>
+
+                    <!-- 3. Body Outfit -->
+                    <div>
+                        <label class="block text-xs font-black text-panda-charcoal mb-1.5">👔 服裝造型 (Outfits)</label>
+                        <div id="wardrobeBodyOptions" class="grid grid-cols-3 gap-2"></div>
+                    </div>
+
+                    <!-- 4. Hand Prop -->
+                    <div>
+                        <label class="block text-xs font-black text-panda-charcoal mb-1.5">🧋 手持道具 (Hand Props)</label>
+                        <div id="wardrobePropOptions" class="grid grid-cols-3 gap-2"></div>
+                    </div>
+
+                    <!-- 5. Stage Backdrop -->
+                    <div>
+                        <label class="block text-xs font-black text-panda-charcoal mb-1.5">🌸 舞台背景 (Stage Backdrop)</label>
+                        <div id="wardrobeStageOptions" class="grid grid-cols-3 sm:grid-cols-5 gap-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-5 pt-3.5 border-t border-panda-pastel flex items-center justify-between gap-3">
+                <button onclick="applyOutfitPreset('classic')" class="px-4 py-2.5 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold text-xs transition-all">
+                    還原預設造型
+                </button>
+                <button onclick="closeWardrobeModal(true)" class="px-6 py-2.5 rounded-2xl shimmer-btn text-white font-black text-xs sm:text-sm shadow-lg shadow-panda/25">
+                    ✨ 儲存穿搭並返回任務！
+                </button>
+            </div>
         </div>
     </div>
 
@@ -568,14 +895,22 @@
                     <div class="flex items-center gap-2">
                         <h1 class="font-black text-lg sm:text-xl text-panda tracking-tight">AM 每日任務循環</h1>
                         <span class="hidden sm:inline-block px-2 py-0.5 text-[11px] font-bold bg-panda-soft text-panda rounded-full border border-panda-pastel">
-                            AMC 每月挑戰連動中
+                            個人化裝扮 × 專屬待辦版位
                         </span>
                     </div>
-                    <p class="text-xs text-gray-500 font-medium">每日打卡換下班機車券 × 當週五星野餐 × 每月AMC學士帽天使降臨</p>
+                    <p class="text-xs text-gray-500 font-medium">每日打卡換下班機車券 × 個人待辦清單 × 每月AMC學士帽天使降臨</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <button 
+                    onclick="openWardrobeModal()" 
+                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-panda-soft hover:bg-panda-pastel text-panda font-black text-xs border border-panda-pastel transition-all shadow-sm"
+                >
+                    <span>👗</span>
+                    <span>Pau-Pau 更衣室</span>
+                </button>
+
                 <div id="clockBadge" class="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-panda-soft border border-panda-pastel text-panda-charcoal">
                     <i class="fa-regular fa-clock text-panda"></i>
                     <span id="currentDateDisplay" class="text-xs font-bold text-gray-600">----/--/--</span>
@@ -610,53 +945,69 @@
 
                 <!-- Speech Bubble -->
                 <div class="relative bg-white text-panda-charcoal rounded-2xl p-4 shadow-lg mb-4 border-2 border-panda-pastel">
-                    <div class="flex items-start justify-between gap-2.5">
-                        <div class="flex items-start gap-2.5">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex items-start gap-2">
                             <span class="text-xl">💬</span>
                             <div>
                                 <p class="text-xs font-black text-panda uppercase tracking-wider mb-0.5">PAU-PAU 悄悄話</p>
                                 <p id="pauSpeechText" class="text-sm font-bold leading-snug">
-                                    早安！別忘了當月還有 AMC 三階段挑戰，集滿 3 頂學士帽換天使 All Pass 祝福喔！🐾
+                                    早安！快幫我換上喜歡的個人化裝扮，再把今天的個人待辦事項列出來一起完成吧！🐾
                                 </p>
                             </div>
                         </div>
-                        <button 
-                            onclick="togglePauOutfit(event)" 
-                            class="flex-shrink-0 px-2.5 py-1 rounded-xl bg-panda-soft hover:bg-panda-pastel text-panda font-black text-[11px] transition-all border border-panda-pastel shadow-sm"
-                            title="切換造型"
-                        >
-                            🏃 換裝
-                        </button>
+                        <div class="flex flex-col gap-1 flex-shrink-0">
+                            <button 
+                                onclick="openWardrobeModal(event)" 
+                                class="px-2.5 py-1 rounded-xl shimmer-btn text-white font-black text-[11px] transition-all shadow-sm flex items-center gap-1"
+                                title="打開個人化造型更衣室"
+                            >
+                                <span>👗</span><span>個人化裝扮</span>
+                            </button>
+                            <button 
+                                onclick="randomizePauOutfit(event)" 
+                                class="px-2.5 py-1 rounded-xl bg-panda-soft hover:bg-panda-pastel text-panda font-black text-[10px] transition-all border border-panda-pastel flex items-center justify-center gap-1"
+                                title="隨機換一套穿搭"
+                            >
+                                <span>🎲</span><span>隨機穿搭</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="w-4 h-4 bg-white border-r-2 border-b-2 border-panda-pastel transform rotate-45 absolute -bottom-2 left-16"></div>
                 </div>
 
                 <!-- 3D Mascot Studio Card & Stats -->
                 <div class="flex flex-col sm:flex-row items-center gap-4 my-auto py-2">
-                    <div 
-                        id="pauMascotContainer" 
-                        class="w-44 h-48 sm:w-48 sm:h-52 flex-shrink-0 bg-white rounded-3xl p-2 shadow-xl border-2 border-pink-200/80 pau-float cursor-pointer select-none relative overflow-hidden flex items-center justify-center" 
-                        onclick="pokePauPau()" 
-                        title="點我跟 Pau-Pau 互動！"
-                    >
-                        <div class="absolute top-2.5 left-3 flex items-center gap-1 pointer-events-none z-10">
-                            <svg width="16" height="16" viewBox="0 0 28 28">
-                                <use href="#FoodpandaBrandLogo"/>
+                    <div class="flex flex-col items-center gap-2 flex-shrink-0">
+                        <div 
+                            id="pauMascotContainer" 
+                            class="w-44 h-48 sm:w-48 sm:h-52 rounded-3xl p-2 shadow-xl border-2 border-pink-200/80 pau-float cursor-pointer select-none relative overflow-hidden flex items-center justify-center stage-classic transition-all duration-300" 
+                            onclick="pokePauPau()" 
+                            title="點我跟 Pau-Pau 互動！"
+                        >
+                            <div id="heroStageDecor" class="absolute inset-0 pointer-events-none"></div>
+
+                            <div class="absolute top-2.5 left-3 flex items-center gap-1 pointer-events-none z-20 bg-white/80 backdrop-blur-sm px-1.5 py-0.5 rounded-lg">
+                                <svg width="14" height="14" viewBox="0 0 28 28">
+                                    <use href="#FoodpandaBrandLogo"/>
+                                </svg>
+                                <span class="text-[10px] font-black tracking-tight text-[#E21B70] font-display">foodpanda</span>
+                            </div>
+
+                            <button 
+                                onclick="openWardrobeModal(event)"
+                                class="absolute bottom-2 right-2 z-20 px-2 py-0.5 rounded-full bg-panda/90 hover:bg-panda text-white font-black text-[10px] shadow-md flex items-center gap-1"
+                            >
+                                <i class="fa-solid fa-wand-magic-sparkles"></i><span>換裝</span>
+                            </button>
+
+                            <svg viewBox="0 0 260 275" class="w-full h-full pt-2 relative z-10">
+                                <use href="#PauPau3DFigure"/>
+                                <g class="custom-outfit-target"></g>
                             </svg>
-                            <span class="text-[11px] font-black tracking-tight text-[#E21B70] font-display">foodpanda</span>
                         </div>
-
-                        <svg id="pauSvgClassic" viewBox="0 0 260 275" class="w-full h-full pt-2">
-                            <use href="#PauPau3DFigure"/>
-                        </svg>
-
-                        <svg id="pauSvgMarathon" viewBox="0 0 260 275" class="w-full h-full pt-2 hidden">
-                            <use href="#PauPau3DFigure"/>
-                            <rect x="103" y="168" width="54" height="36" rx="3.5" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
-                            <rect x="103" y="168" width="54" height="9.5" rx="2" fill="#D70F64"/>
-                            <text x="130" y="175" text-anchor="middle" fill="#FFFFFF" font-size="6" font-weight="900">foodpanda</text>
-                            <text x="130" y="196" text-anchor="middle" fill="#181516" font-size="18" font-weight="900" font-family="monospace">188</text>
-                        </svg>
+                        <div id="currentOutfitSummaryPill" class="px-3 py-0.5 rounded-full bg-black/20 text-[10px] font-bold text-pink-100 truncate max-w-[190px]">
+                            🐾 經典原味穿搭
+                        </div>
                     </div>
 
                     <!-- Progress, Stars & Pomodoro -->
@@ -717,7 +1068,7 @@
                 </div>
 
                 <div class="text-[11px] text-pink-100 flex items-center justify-between pt-2 border-t border-white/15">
-                    <span>💡 點擊 Pau-Pau 會為你加油打氣！</span>
+                    <span>💡 點擊 Pau-Pau 互動，或點「個人化裝扮」自由穿搭！</span>
                     <span id="completedCountPill" class="font-bold bg-black/20 px-2.5 py-0.5 rounded-full">0 / 3 任務</span>
                 </div>
             </div>
@@ -945,11 +1296,11 @@
             </div>
         </section>
 
-        <!-- SECTION 3: DAILY TASKS & MONTHLY PROGRESS -->
-        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- SECTION 3: DAILY TASKS (LEFT 7) & PERSONAL TO-DO BOARD (RIGHT 5) -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
             <!-- LEFT 7 COLS: 每日任務 -->
-            <div class="lg:col-span-7 space-y-5">
+            <div class="lg:col-span-7 space-y-5 flex flex-col justify-between">
                 <div class="flex flex-wrap items-center justify-between gap-2 bg-white px-5 py-4 rounded-3xl shadow-sm border border-panda-pastel">
                     <div class="flex items-center gap-3">
                         <span class="w-9 h-9 rounded-xl bg-panda text-white flex items-center justify-center font-bold">
@@ -1027,12 +1378,139 @@
                         <div id="bonusTaskAction" class="w-full sm:w-auto"></div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- RIGHT 5 COLS: 當月進度 & 票券夾 -->
-            <div class="lg:col-span-5 space-y-5">
-                <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel">
+            <!-- RIGHT 5 COLS: 個人待辦事項版位 (PERSONAL TO-DO BOARD) -->
+            <div class="lg:col-span-5 flex flex-col">
+                <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel flex-1 flex flex-col justify-between">
+                    <div>
+                        <!-- Header -->
+                        <div class="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-panda-pastel">
+                            <div class="flex items-center gap-2.5">
+                                <span class="w-9 h-9 rounded-xl bg-panda text-white flex items-center justify-center font-bold shadow-sm">
+                                    <i class="fa-solid fa-clipboard-check"></i>
+                                </span>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h2 class="text-lg font-black text-panda-charcoal">個人待辦事項</h2>
+                                        <span class="px-2 py-0.5 rounded-full bg-panda-soft text-panda font-black text-[10px]">
+                                            專屬隨手記
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">自由新增店家追蹤、會議準備與個人今日備忘</p>
+                                </div>
+                            </div>
+                            <span id="todoStatsPill" class="px-2.5 py-1 rounded-full bg-panda-soft text-panda font-black text-xs">
+                                0 / 0 完成
+                            </span>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="bg-panda-soft/60 rounded-2xl p-3 border border-panda-pastel mb-4">
+                            <div class="flex justify-between items-center text-xs mb-1.5">
+                                <span class="font-bold text-panda-charcoal">📌 待辦事項完成率</span>
+                                <span id="todoProgressPercent" class="font-black text-panda">0%</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-white rounded-full overflow-hidden border border-panda-pastel">
+                                <div id="todoProgressBar" class="h-full bg-gradient-to-r from-panda to-pink-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Add New To-Do Form -->
+                        <form id="personalTodoForm" class="space-y-2.5 mb-4">
+                            <div class="flex gap-2">
+                                <input 
+                                    type="text" 
+                                    id="todoInputText" 
+                                    maxlength="60"
+                                    placeholder="輸入待辦事項（如：追蹤王記燒肉合約）..." 
+                                    required
+                                    class="flex-1 px-3.5 py-2.5 rounded-2xl border-2 border-panda-pastel focus:border-panda focus:ring-2 focus:ring-panda/15 outline-none text-xs sm:text-sm font-bold text-panda-charcoal bg-panda-soft/30"
+                                >
+                                <button 
+                                    type="submit" 
+                                    class="px-4 py-2.5 rounded-2xl shimmer-btn text-white font-black text-xs sm:text-sm shadow-md hover:scale-[1.02] transition-all flex items-center gap-1 flex-shrink-0"
+                                >
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>新增</span>
+                                </button>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-[11px] font-bold text-gray-400">優先度：</span>
+                                    <select id="todoPrioritySelect" class="px-2.5 py-1 rounded-xl border border-panda-pastel bg-white text-xs font-bold text-panda-charcoal outline-none focus:border-panda">
+                                        <option value="high">🔥 緊急優先</option>
+                                        <option value="medium" selected>⭐ 重要待辦</option>
+                                        <option value="normal">📌 一般備忘</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-[11px] font-bold text-gray-400">分類：</span>
+                                    <select id="todoCategorySelect" class="px-2.5 py-1 rounded-xl border border-panda-pastel bg-white text-xs font-bold text-panda-charcoal outline-none focus:border-panda">
+                                        <option value="🏪 店家維繫">🏪 店家維繫</option>
+                                        <option value="📄 合約行政">📄 合約行政</option>
+                                        <option value="📊 業績簡報">📊 業績簡報</option>
+                                        <option value="💬 內部溝通">💬 內部溝通</option>
+                                        <option value="✨ 個人其他">✨ 個人其他</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Quick One-Click Chips -->
+                        <div class="mb-4">
+                            <p class="text-[11px] font-bold text-gray-400 mb-1.5">⚡ 點擊快速帶入常用待辦：</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button type="button" onclick="quickAddTodo('追蹤重點店家續約與折扣', 'high', '🏪 店家維繫')" class="px-2.5 py-1 rounded-xl bg-panda-soft/70 hover:bg-panda-pastel text-panda font-bold text-[11px] transition-all">
+                                    + 追蹤重點店家續約
+                                </button>
+                                <button type="button" onclick="quickAddTodo('確認本週新上線廣告名單', 'medium', '📊 業績簡報')" class="px-2.5 py-1 rounded-xl bg-panda-soft/70 hover:bg-panda-pastel text-panda font-bold text-[11px] transition-all">
+                                    + 確認新上線廣告
+                                </button>
+                                <button type="button" onclick="quickAddTodo('整理週會數據與AMC進度', 'medium', '📊 業績簡報')" class="px-2.5 py-1 rounded-xl bg-panda-soft/70 hover:bg-panda-pastel text-panda font-bold text-[11px] transition-all">
+                                    + 整理週會AMC數據
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Filter Tabs -->
+                        <div class="flex items-center justify-between gap-1 bg-panda-soft/60 p-1 rounded-2xl border border-panda-pastel mb-3">
+                            <button onclick="setTodoFilter('all')" id="todoTabAll" class="flex-1 py-1.5 rounded-xl text-xs font-black bg-panda text-white shadow-sm transition-all">
+                                全部
+                            </button>
+                            <button onclick="setTodoFilter('active')" id="todoTabActive" class="flex-1 py-1.5 rounded-xl text-xs font-bold text-gray-600 hover:text-panda transition-all">
+                                待完成
+                            </button>
+                            <button onclick="setTodoFilter('done')" id="todoTabDone" class="flex-1 py-1.5 rounded-xl text-xs font-bold text-gray-600 hover:text-panda transition-all">
+                                已完成
+                            </button>
+                            <button onclick="setTodoFilter('high')" id="todoTabHigh" class="flex-1 py-1.5 rounded-xl text-xs font-bold text-gray-600 hover:text-panda transition-all">
+                                🔥 緊急
+                            </button>
+                        </div>
+
+                        <!-- Todo Items List -->
+                        <div id="personalTodoList" class="space-y-2 max-h-[340px] overflow-y-auto custom-scroll pr-1"></div>
+                    </div>
+
+                    <!-- Footer Actions -->
+                    <div class="pt-3 mt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                        <span>💡 點擊 📌 圖示可將重要待辦置頂</span>
+                        <button onclick="clearCompletedTodos()" class="text-rose-500 hover:underline font-bold">
+                            清除已完成項目
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SECTION 4: MONTHLY PROGRESS CALENDAR (LEFT 7) & INSPECTOR + WALLET (RIGHT 5) -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            <!-- LEFT 7 COLS: 當月進度日曆 -->
+            <div class="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel flex flex-col justify-between">
+                <div>
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-2.5">
                             <span class="w-9 h-9 rounded-xl bg-panda text-white flex items-center justify-center font-bold">
@@ -1040,7 +1518,7 @@
                             </span>
                             <div>
                                 <h2 class="text-lg font-black text-panda-charcoal">當月進度</h2>
-                                <p class="text-xs text-gray-500">點選日期查看每日任務紀錄與積分</p>
+                                <p class="text-xs text-gray-500">點選日期查看每日任務紀錄、個人待辦完成數與積分</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-1 bg-panda-soft px-2 py-1 rounded-xl border border-panda-pastel">
@@ -1078,10 +1556,12 @@
                     </div>
                     <div id="calendarGrid" class="grid grid-cols-7 gap-1"></div>
                 </div>
+            </div>
 
-                <!-- Daily Inspection & Wallet -->
-                <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel space-y-4">
-                    <div class="flex items-center justify-between">
+            <!-- RIGHT 5 COLS: Daily Inspection & Wallet -->
+            <div class="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-6 shadow-md border-2 border-panda-pastel flex flex-col justify-between space-y-4">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
                         <h3 class="text-base font-black text-panda-charcoal flex items-center gap-2">
                             <i class="fa-solid fa-magnifying-glass-chart text-panda"></i>
                             <span id="selectedDateTitle">當日明細檢視</span>
@@ -1089,21 +1569,20 @@
                         <span id="selectedDatePointsPill" class="px-2.5 py-0.5 rounded-full bg-panda-soft text-panda font-black text-xs">0 pts</span>
                     </div>
 
-                    <div id="selectedDateDetailBox" class="bg-panda-soft/40 rounded-2xl p-3 border border-panda-pastel text-xs space-y-1.5"></div>
+                    <div id="selectedDateDetailBox" class="bg-panda-soft/40 rounded-2xl p-3.5 border border-panda-pastel text-xs space-y-2"></div>
+                </div>
 
-                    <!-- Voucher Wallet -->
-                    <div class="pt-2 border-t border-gray-100">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-black text-gray-500 uppercase tracking-wider">
-                                🎒 我的票券夾（點擊觸發機車 / 野餐 / 天使動畫）
-                            </span>
-                            <span id="walletCountText" class="text-xs font-bold text-panda">共 0 張</span>
-                        </div>
-                        <div id="voucherWalletList" class="space-y-2 max-h-52 overflow-y-auto pr-1"></div>
+                <!-- Voucher Wallet -->
+                <div class="pt-3 border-t border-gray-100 flex-1 flex flex-col justify-end">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-black text-gray-500 uppercase tracking-wider">
+                            🎒 我的票券夾（點擊觸發機車 / 野餐 / 天使動畫）
+                        </span>
+                        <span id="walletCountText" class="text-xs font-bold text-panda">共 0 張</span>
                     </div>
+                    <div id="voucherWalletList" class="space-y-2 max-h-56 overflow-y-auto custom-scroll pr-1"></div>
                 </div>
             </div>
-
         </section>
 
     </main>
@@ -1115,7 +1594,50 @@
     <script>
         const REQUIRED_PASSCODE = '9527';
         const STORAGE_KEY = 'paupau_am_loop_v2';
-        const OFF_WORK_REQUIRED_PTS = 60; // 積分門檻已調整為 60 pts
+        const OFF_WORK_REQUIRED_PTS = 60;
+
+        // Wardrobe Catalog Definitions
+        const WARDROBE_CATALOG = {
+            hats: [
+                { id: 'none', name: '無頭飾', icon: '🐾' },
+                { id: 'crown', name: '業績王皇冠', icon: '👑' },
+                { id: 'strawhat', name: '渡假草帽', icon: '👒' },
+                { id: 'gradcap', name: 'AMC學士帽', icon: '🎓' },
+                { id: 'helmet', name: '熊貓安全帽', icon: '⛑️' },
+                { id: 'headband', name: '必勝頭帶', icon: '🔥' },
+                { id: 'bow', name: '甜心蝴蝶結', icon: '🎀' }
+            ],
+            faces: [
+                { id: 'none', name: '水汪汪大眼', icon: '👀' },
+                { id: 'sunglasses', name: '潮流墨鏡', icon: '😎' },
+                { id: 'glasses', name: '金框眼鏡', icon: '🤓' },
+                { id: 'star_glasses', name: '派對星星鏡', icon: '🤩' },
+                { id: 'blush', name: '愛心腮紅', icon: '💗' }
+            ],
+            bodies: [
+                { id: 'classic', name: '經典原味', icon: '🐾' },
+                { id: 'marathon', name: '馬拉松#188', icon: '🏃' },
+                { id: 'suit', name: '王牌西裝', icon: '👔' },
+                { id: 'hoodie', name: '熊貓粉帽T', icon: '🧥' },
+                { id: 'cape', name: '超人披風', icon: '🦸' },
+                { id: 'apron', name: '咖啡師圍裙', icon: '☕' }
+            ],
+            props: [
+                { id: 'none', name: '揮手肉球', icon: '👋' },
+                { id: 'boba', name: '珍珠奶茶', icon: '🧋' },
+                { id: 'coffee', name: '提神咖啡', icon: '☕' },
+                { id: 'megaphone', name: '衝刺大聲公', icon: '📢' },
+                { id: 'wand', name: '幸運魔法棒', icon: '🪄' },
+                { id: 'trophy', name: '冠軍獎盃', icon: '🏆' }
+            ],
+            stages: [
+                { id: 'classic', name: '純白舞台', icon: '⬜' },
+                { id: 'sakura', name: '浪漫粉櫻', icon: '🌸' },
+                { id: 'gold', name: '黃金榮耀', icon: '✨' },
+                { id: 'night', name: '霓虹星空', icon: '🌙' },
+                { id: 'meadow', name: '陽光草地', icon: '🍀' }
+            ]
+        };
 
         let appData = {
             userName: '',
@@ -1130,13 +1652,22 @@
                 allPassRedeemed: false,
                 allPassSerial: null,
                 allPassTime: null
-            }
+            },
+            outfit: {
+                hat: 'none',
+                face: 'none',
+                body: 'classic',
+                prop: 'none',
+                stage: 'classic'
+            },
+            personalTodos: []
         };
 
         let simulatedTimeStr = null;
         let viewingYear = new Date().getFullYear();
         let viewingMonth = new Date().getMonth();
         let selectedDateKey = '';
+        let currentTodoFilter = 'all';
 
         function getCurrentYearMonth() {
             const now = new Date();
@@ -1179,7 +1710,15 @@
                             allPassRedeemed: false,
                             allPassSerial: null,
                             allPassTime: null
-                        }
+                        },
+                        outfit: parsed.outfit || {
+                            hat: 'none',
+                            face: 'none',
+                            body: 'classic',
+                            prop: 'none',
+                            stage: 'classic'
+                        },
+                        personalTodos: Array.isArray(parsed.personalTodos) ? parsed.personalTodos : []
                     };
                 } else {
                     appData.monthlyAmc.currentMonth = getCurrentYearMonth();
@@ -1239,6 +1778,405 @@
                 };
             }
             return appData.days[dateKey];
+        }
+
+        /* ==========================================
+           PERSONALIZED DRESS-UP / WARDROBE LOGIC
+           ========================================== */
+        function getStageDecorHTML(stageId) {
+            if (stageId === 'sakura') {
+                return `
+                    <span class="absolute top-2 right-3 text-sm opacity-80 animate-bounce">🌸</span>
+                    <span class="absolute bottom-8 left-3 text-xs opacity-70 animate-pulse">🌸</span>
+                    <span class="absolute top-12 left-4 text-[10px] opacity-60">💮</span>
+                `;
+            }
+            if (stageId === 'gold') {
+                return `
+                    <span class="absolute top-2 right-3 text-sm animate-ping">✨</span>
+                    <span class="absolute bottom-10 left-3 text-sm animate-pulse">⭐</span>
+                    <span class="absolute top-10 left-3 text-xs">💫</span>
+                `;
+            }
+            if (stageId === 'night') {
+                return `
+                    <span class="absolute top-2 right-3 text-sm animate-pulse">🌙</span>
+                    <span class="absolute top-10 left-4 text-xs text-yellow-200 animate-ping">✦</span>
+                    <span class="absolute bottom-12 right-4 text-xs text-pink-300 animate-pulse">★</span>
+                `;
+            }
+            if (stageId === 'meadow') {
+                return `
+                    <span class="absolute top-2 right-3 text-sm">☀️</span>
+                    <span class="absolute bottom-2 left-3 text-xs">🍀</span>
+                    <span class="absolute bottom-2 right-12 text-xs">🌼</span>
+                `;
+            }
+            return '';
+        }
+
+        function renderPauOutfitSVG() {
+            const o = appData.outfit || { hat: 'none', face: 'none', body: 'classic', prop: 'none', stage: 'classic' };
+            let svgParts = '';
+
+            // 1. Body layer
+            if (o.body && o.body !== 'classic') {
+                svgParts += `<use href="#outfit-${o.body}"/>`;
+            }
+            // 2. Face / Glasses layer
+            if (o.face && o.face !== 'none') {
+                svgParts += `<use href="#face-${o.face}"/>`;
+            }
+            // 3. Hat layer
+            if (o.hat && o.hat !== 'none') {
+                svgParts += `<use href="#hat-${o.hat}"/>`;
+            }
+            // 4. Hand Prop layer
+            if (o.prop && o.prop !== 'none') {
+                svgParts += `<use href="#prop-${o.prop}"/>`;
+            }
+
+            document.querySelectorAll('.custom-outfit-target').forEach(el => {
+                el.innerHTML = svgParts;
+            });
+
+            // Update Stage classes on Hero & Wardrobe preview
+            const stageClasses = ['stage-classic', 'stage-sakura', 'stage-gold', 'stage-night', 'stage-meadow'];
+            const activeStageClass = `stage-${o.stage || 'classic'}`;
+
+            ['pauMascotContainer', 'wardrobePreviewStage'].forEach(id => {
+                const box = document.getElementById(id);
+                if (box) {
+                    stageClasses.forEach(c => box.classList.remove(c));
+                    box.classList.add(activeStageClass);
+                }
+            });
+
+            const decorHTML = getStageDecorHTML(o.stage || 'classic');
+            const heroDecor = document.getElementById('heroStageDecor');
+            const wardDecor = document.getElementById('wardrobeStageDecor');
+            if (heroDecor) heroDecor.innerHTML = decorHTML;
+            if (wardDecor) wardDecor.innerHTML = decorHTML;
+
+            // Update summary pill
+            const pill = document.getElementById('currentOutfitSummaryPill');
+            if (pill) {
+                const hatObj = WARDROBE_CATALOG.hats.find(x => x.id === o.hat);
+                const faceObj = WARDROBE_CATALOG.faces.find(x => x.id === o.face);
+                const bodyObj = WARDROBE_CATALOG.bodies.find(x => x.id === o.body);
+                const propObj = WARDROBE_CATALOG.props.find(x => x.id === o.prop);
+
+                const activeNames = [];
+                if (hatObj && hatObj.id !== 'none') activeNames.push(hatObj.icon + hatObj.name);
+                if (faceObj && faceObj.id !== 'none') activeNames.push(faceObj.icon + faceObj.name);
+                if (bodyObj && bodyObj.id !== 'classic') activeNames.push(bodyObj.icon + bodyObj.name);
+                if (propObj && propObj.id !== 'none') activeNames.push(propObj.icon + propObj.name);
+
+                pill.textContent = activeNames.length > 0 ? activeNames.join(' · ') : '🐾 經典原味穿搭';
+            }
+        }
+
+        function renderWardrobeControls() {
+            const o = appData.outfit;
+
+            function buildButtons(list, currentVal, categoryKey) {
+                return list.map(item => {
+                    const active = item.id === currentVal;
+                    return `
+                        <button 
+                            type="button"
+                            onclick="selectOutfitPart('${categoryKey}', '${item.id}')"
+                            class="p-2 rounded-2xl border-2 text-center transition-all flex flex-col items-center justify-center gap-0.5 ${
+                                active 
+                                ? 'border-panda bg-panda-soft text-panda font-black shadow-sm scale-[1.02]' 
+                                : 'border-panda-pastel/70 bg-white hover:border-panda/50 text-panda-charcoal font-bold'
+                            }"
+                        >
+                            <span class="text-base">${item.icon}</span>
+                            <span class="text-[11px] truncate w-full">${item.name}</span>
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('wardrobeHatOptions').innerHTML = buildButtons(WARDROBE_CATALOG.hats, o.hat, 'hat');
+            document.getElementById('wardrobeFaceOptions').innerHTML = buildButtons(WARDROBE_CATALOG.faces, o.face, 'face');
+            document.getElementById('wardrobeBodyOptions').innerHTML = buildButtons(WARDROBE_CATALOG.bodies, o.body, 'body');
+            document.getElementById('wardrobePropOptions').innerHTML = buildButtons(WARDROBE_CATALOG.props, o.prop, 'prop');
+            document.getElementById('wardrobeStageOptions').innerHTML = buildButtons(WARDROBE_CATALOG.stages, o.stage, 'stage');
+        }
+
+        function selectOutfitPart(category, id) {
+            appData.outfit[category] = id;
+            saveStorage();
+            renderPauOutfitSVG();
+            renderWardrobeControls();
+            triggerMascotCheer();
+        }
+
+        function applyOutfitPreset(presetName) {
+            if (presetName === 'classic') {
+                appData.outfit = { hat: 'none', face: 'none', body: 'classic', prop: 'none', stage: 'classic' };
+                document.getElementById('pauSpeechText').textContent = '換回經典原味造型！看到我手上的白肉球了嗎？🐾';
+            } else if (presetName === 'mvp') {
+                appData.outfit = { hat: 'crown', face: 'sunglasses', body: 'suit', prop: 'trophy', stage: 'gold' };
+                document.getElementById('pauSpeechText').textContent = '王牌業務 AM 登場！戴上皇冠與墨鏡，今天業績一定爆單！👑🏆';
+            } else if (presetName === 'runner') {
+                appData.outfit = { hat: 'headband', face: 'none', body: 'marathon', prop: 'megaphone', stage: 'meadow' };
+                document.getElementById('pauSpeechText').textContent = '換上馬拉松 #188 戰袍與必勝頭帶！全力衝刺準時下班！🏃💨';
+            } else if (presetName === 'chill') {
+                appData.outfit = { hat: 'strawhat', face: 'blush', body: 'hoodie', prop: 'boba', stage: 'sakura' };
+                document.getElementById('pauSpeechText').textContent = '喝杯黑糖珍珠奶茶配粉櫻舞台，心情充飽電繼續衝！🧋🌸';
+            }
+            saveStorage();
+            renderPauOutfitSVG();
+            renderWardrobeControls();
+            triggerMascotCheer();
+        }
+
+        function randomizePauOutfit(e) {
+            if (e) e.stopPropagation();
+            const pick = arr => arr[Math.floor(Math.random() * arr.length)].id;
+            appData.outfit = {
+                hat: pick(WARDROBE_CATALOG.hats),
+                face: pick(WARDROBE_CATALOG.faces),
+                body: pick(WARDROBE_CATALOG.bodies),
+                prop: pick(WARDROBE_CATALOG.props),
+                stage: pick(WARDROBE_CATALOG.stages)
+            };
+            saveStorage();
+            renderPauOutfitSVG();
+            renderWardrobeControls();
+            triggerMascotCheer();
+            document.getElementById('pauSpeechText').textContent = '🎲 登登！這是我的隨機驚喜新穿搭，好看嗎？🐾✨';
+            showToast('🎲 已為 Pau-Pau 換上隨機驚喜穿搭！', 'success');
+        }
+
+        function openWardrobeModal(e) {
+            if (e) e.stopPropagation();
+            renderWardrobeControls();
+            renderPauOutfitSVG();
+            document.getElementById('wardrobeModal').classList.remove('hidden');
+        }
+
+        function closeWardrobeModal(showSavedToast = false) {
+            document.getElementById('wardrobeModal').classList.add('hidden');
+            if (showSavedToast) {
+                confetti({ particleCount: 35, spread: 55 });
+                showToast('👗 Pau-Pau 個人化裝扮已儲存！', 'success');
+            }
+        }
+
+        /* ==========================================
+           PERSONAL TO-DO LIST LOGIC
+           ========================================== */
+        document.getElementById('personalTodoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('todoInputText');
+            const priorityEl = document.getElementById('todoPrioritySelect');
+            const categoryEl = document.getElementById('todoCategorySelect');
+
+            const text = inputEl.value.trim();
+            if (!text) return;
+
+            addPersonalTodoItem(text, priorityEl.value, categoryEl.value);
+            inputEl.value = '';
+        });
+
+        function addPersonalTodoItem(text, priority = 'medium', category = '🏪 店家維繫') {
+            const eff = getEffectiveTime();
+            const newItem = {
+                id: 'todo_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+                text,
+                priority,
+                category,
+                done: false,
+                pinned: priority === 'high',
+                createdDate: getTodayKey(),
+                createdTime: eff.timeStr,
+                completedDate: null
+            };
+            appData.personalTodos.unshift(newItem);
+            saveStorage();
+            renderPersonalTodos();
+            renderCalendar();
+            renderInspector();
+            triggerMascotCheer();
+            showToast(`📌 已新增個人待辦：「${text}」`, 'info');
+        }
+
+        function quickAddTodo(text, priority, category) {
+            addPersonalTodoItem(text, priority, category);
+        }
+
+        function togglePersonalTodo(id) {
+            const item = appData.personalTodos.find(t => t.id === id);
+            if (!item) return;
+            item.done = !item.done;
+            item.completedDate = item.done ? getTodayKey() : null;
+            saveStorage();
+            renderPersonalTodos();
+            renderCalendar();
+            renderInspector();
+            triggerMascotCheer();
+
+            if (item.done) {
+                confetti({ particleCount: 30, spread: 50 });
+                document.getElementById('pauSpeechText').textContent = `太棒了！完成了個人待辦「${item.text}」，離目標又更進一步囉！🐾`;
+                showToast(`✅ 完成個人待辦：${item.text}`, 'success');
+            }
+        }
+
+        function togglePinTodo(id) {
+            const item = appData.personalTodos.find(t => t.id === id);
+            if (!item) return;
+            item.pinned = !item.pinned;
+            saveStorage();
+            renderPersonalTodos();
+        }
+
+        function deletePersonalTodo(id) {
+            appData.personalTodos = appData.personalTodos.filter(t => t.id !== id);
+            saveStorage();
+            renderPersonalTodos();
+            renderCalendar();
+            renderInspector();
+        }
+
+        function clearCompletedTodos() {
+            const doneCount = appData.personalTodos.filter(t => t.done).length;
+            if (doneCount === 0) {
+                showToast('目前沒有已完成的待辦項目可清除喔！', 'info');
+                return;
+            }
+            appData.personalTodos = appData.personalTodos.filter(t => !t.done);
+            saveStorage();
+            renderPersonalTodos();
+            renderCalendar();
+            renderInspector();
+            showToast(`🧹 已清除 ${doneCount} 項已完成待辦事項`, 'info');
+        }
+
+        function setTodoFilter(filter) {
+            currentTodoFilter = filter;
+            renderPersonalTodos();
+        }
+
+        function renderPersonalTodos() {
+            const allTodos = appData.personalTodos || [];
+            const doneCount = allTodos.filter(t => t.done).length;
+            const totalCount = allTodos.length;
+            const pct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
+
+            document.getElementById('todoStatsPill').textContent = `${doneCount} / ${totalCount} 完成`;
+            document.getElementById('todoProgressPercent').textContent = `${pct}%`;
+            document.getElementById('todoProgressBar').style.width = `${pct}%`;
+
+            // Update Filter Tab Styles
+            const tabs = {
+                all: 'todoTabAll',
+                active: 'todoTabActive',
+                done: 'todoTabDone',
+                high: 'todoTabHigh'
+            };
+            Object.keys(tabs).forEach(k => {
+                const btn = document.getElementById(tabs[k]);
+                if (!btn) return;
+                if (k === currentTodoFilter) {
+                    btn.className = 'flex-1 py-1.5 rounded-xl text-xs font-black bg-panda text-white shadow-sm transition-all';
+                } else {
+                    btn.className = 'flex-1 py-1.5 rounded-xl text-xs font-bold text-gray-600 hover:text-panda transition-all';
+                }
+            });
+
+            // Filter & Sort (Pinned first, then unfinished before finished)
+            let filtered = allTodos.slice();
+            if (currentTodoFilter === 'active') filtered = filtered.filter(t => !t.done);
+            else if (currentTodoFilter === 'done') filtered = filtered.filter(t => t.done);
+            else if (currentTodoFilter === 'high') filtered = filtered.filter(t => t.priority === 'high');
+
+            filtered.sort((a, b) => {
+                if (a.done !== b.done) return a.done ? 1 : -1;
+                if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+                return 0;
+            });
+
+            const listEl = document.getElementById('personalTodoList');
+            if (filtered.length === 0) {
+                listEl.innerHTML = `
+                    <div class="text-center py-8 px-4 rounded-2xl bg-panda-soft/30 border border-dashed border-panda-pastel">
+                        <div class="text-3xl mb-1">🐾</div>
+                        <p class="text-xs font-black text-panda-charcoal">目前沒有符合條件的個人待辦事項</p>
+                        <p class="text-[11px] text-gray-400 mt-0.5">在上方輸入框新增今日備忘，讓 Pau-Pau 陪你逐一打勾！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const priBadgeMap = {
+                high: '<span class="px-2 py-0.5 rounded-md bg-rose-100 text-rose-700 font-black text-[10px]">🔥 緊急</span>',
+                medium: '<span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 font-black text-[10px]">⭐ 重要</span>',
+                normal: '<span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 font-bold text-[10px]">📌 一般</span>'
+            };
+
+            listEl.innerHTML = filtered.map(item => `
+                <div class="p-3 rounded-2xl border-2 transition-all flex items-start justify-between gap-2.5 ${
+                    item.done 
+                    ? 'bg-emerald-50/50 border-emerald-200 opacity-75' 
+                    : item.pinned 
+                      ? 'bg-amber-50/40 border-amber-300 shadow-sm' 
+                      : 'bg-white border-panda-pastel/80 hover:border-panda'
+                }">
+                    <button 
+                        onclick="togglePersonalTodo('${item.id}')"
+                        class="mt-0.5 w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${
+                            item.done 
+                            ? 'bg-emerald-500 text-white' 
+                            : 'border-2 border-panda text-transparent hover:bg-panda-soft'
+                        }"
+                    >
+                        <i class="fa-solid fa-check text-xs"></i>
+                    </button>
+
+                    <div class="flex-1 min-w-0 cursor-pointer" onclick="togglePersonalTodo('${item.id}')">
+                        <div class="flex flex-wrap items-center gap-1.5 mb-1">
+                            ${priBadgeMap[item.priority] || priBadgeMap.normal}
+                            <span class="px-2 py-0.5 rounded-md bg-panda-soft text-panda font-bold text-[10px]">${item.category || '✨ 個人'}</span>
+                            <span class="text-[10px] text-gray-400 font-mono">${item.createdDate.slice(5).replace('-', '/')} ${item.createdTime || ''}</span>
+                        </div>
+                        <p class="text-xs sm:text-sm font-black break-words ${item.done ? 'line-through text-gray-400' : 'text-panda-charcoal'}">
+                            ${escapeHtml(item.text)}
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-1 flex-shrink-0">
+                        <button 
+                            onclick="togglePinTodo('${item.id}')" 
+                            class="w-7 h-7 rounded-lg flex items-center justify-center text-xs transition-all ${
+                                item.pinned ? 'bg-amber-200 text-amber-900' : 'text-gray-300 hover:text-amber-600 hover:bg-amber-50'
+                            }"
+                            title="置頂待辦"
+                        >
+                            <i class="fa-solid fa-thumbtack"></i>
+                        </button>
+                        <button 
+                            onclick="deletePersonalTodo('${item.id}')" 
+                            class="w-7 h-7 rounded-lg flex items-center justify-center text-xs text-gray-300 hover:text-rose-500 hover:bg-rose-50 transition-all"
+                            title="刪除"
+                        >
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
 
         /* Scoring Rules */
@@ -1514,8 +2452,10 @@
         function renderAll() {
             renderHeader();
             renderHero();
+            renderPauOutfitSVG();
             renderAmcSection();
             renderDailyTasks();
+            renderPersonalTodos();
             renderCalendar();
             renderInspector();
             renderWallet();
@@ -1807,6 +2747,7 @@
                 const pts = getDayTotalPoints(rec);
                 const hasStar = Boolean(rec?.starEarned);
                 const hasVoucher = Boolean(rec?.offWorkRedeemed);
+                const todosDoneOnDate = (appData.personalTodos || []).filter(t => t.done && (t.completedDate === dateKey || t.createdDate === dateKey)).length;
                 const isToday = dateKey === todayKey;
 
                 monthPts += pts;
@@ -1820,6 +2761,7 @@
                             <div class="flex gap-0.5 text-[10px]">
                                 ${hasStar ? '⭐' : ''}
                                 ${hasVoucher ? '🛵' : ''}
+                                ${todosDoneOnDate > 0 ? '📌' : ''}
                             </div>
                         </div>
                         <div class="mt-auto">
@@ -1845,22 +2787,26 @@
             if (!selectedDateKey) selectedDateKey = getTodayKey();
             const rec = appData.days[selectedDateKey];
             const pts = getDayTotalPoints(rec);
+            const todosOnDate = (appData.personalTodos || []).filter(t => t.createdDate === selectedDateKey || t.completedDate === selectedDateKey);
+            const todosDoneCount = todosOnDate.filter(t => t.done).length;
+
             document.getElementById('selectedDateTitle').textContent = `${selectedDateKey.replace(/-/g, '/')} 明細`;
             document.getElementById('selectedDatePointsPill').textContent = `${pts} pts`;
 
             const box = document.getElementById('selectedDateDetailBox');
-            if (!rec || (!rec.t1 && !rec.t2 && !rec.t3 && !rec.bonus)) {
-                box.innerHTML = `<p class="text-center py-3 text-gray-400 font-bold">🐾 本日尚無打卡紀錄</p>`;
+            if ((!rec || (!rec.t1 && !rec.t2 && !rec.t3 && !rec.bonus)) && todosOnDate.length === 0) {
+                box.innerHTML = `<p class="text-center py-3 text-gray-400 font-bold">🐾 本日尚無打卡與待辦紀錄</p>`;
                 return;
             }
             box.innerHTML = `
-                <div class="flex justify-between"><span>任務一：gosubar訊息回覆</span><span class="font-bold">${rec.t1 ? `${rec.t1.label} (+${rec.t1.points} pts)` : '未完成'}</span></div>
-                <div class="flex justify-between"><span>任務二：case處理</span><span class="font-bold">${rec.t2 ? `${rec.t2.label} (+${rec.t2.points} pts)` : '未完成'}</span></div>
-                <div class="flex justify-between"><span>任務三：新店家聯繫</span><span class="font-bold">${rec.t3 ? `${rec.t3.label} (+${rec.t3.points} pts)` : '未完成'}</span></div>
-                <div class="flex justify-between"><span>成交店家加分</span><span class="font-bold ${rec.bonus ? 'text-amber-600' : 'text-gray-400'}">${rec.bonus ? '+30 pts' : '無'}</span></div>
+                <div class="flex justify-between"><span>任務一：gosubar訊息回覆</span><span class="font-bold">${rec?.t1 ? `${rec.t1.label} (+${rec.t1.points} pts)` : '未完成'}</span></div>
+                <div class="flex justify-between"><span>任務二：case處理</span><span class="font-bold">${rec?.t2 ? `${rec.t2.label} (+${rec.t2.points} pts)` : '未完成'}</span></div>
+                <div class="flex justify-between"><span>任務三：新店家聯繫</span><span class="font-bold">${rec?.t3 ? `${rec.t3.label} (+${rec.t3.points} pts)` : '未完成'}</span></div>
+                <div class="flex justify-between"><span>成交店家加分</span><span class="font-bold ${rec?.bonus ? 'text-amber-600' : 'text-gray-400'}">${rec?.bonus ? '+30 pts' : '無'}</span></div>
+                <div class="flex justify-between"><span>個人待辦事項</span><span class="font-bold text-panda">已完成 ${todosDoneCount} / ${todosOnDate.length} 項</span></div>
                 <div class="flex justify-between pt-1 border-t border-pink-200/40">
                     <span class="text-panda font-bold">榮譽狀態</span>
-                    <span>${rec.starEarned ? '⭐ 完賽星 ' : ''}${rec.offWorkRedeemed ? '🛵 準時下班券' : ''}</span>
+                    <span>${rec?.starEarned ? '⭐ 完賽星 ' : ''}${rec?.offWorkRedeemed ? '🛵 準時下班券' : (!rec?.starEarned ? '尚無獎章' : '')}</span>
                 </div>
             `;
         }
@@ -2042,27 +2988,19 @@
             triggerMascotCheer();
             const quotes = [
                 '加油加油！完成三項每日任務 + 成交加分，輕鬆達標 60 分換機車下班券！🛵',
+                '想幫我換造型嗎？點選「個人化裝扮」可以換皇冠、墨鏡、西裝和珍珠奶茶喔！🧋👑',
+                '右邊新增了「個人待辦事項」版位，有任何店家待辦都可以隨手記下來！📌',
                 '記得在下午 5:00 前完成所有任務，就可以拿到金光閃閃的星星 ⭐！',
-                '今天有新成交店家嗎？隨時打勾加 30 points，超有成就感！🌟',
                 '每月任務 AMC 集滿 3 頂學士帽，天使 Pau-Pau 會為你降臨祝福喔！👼'
             ];
             document.getElementById('pauSpeechText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
         }
         function triggerMascotCheer() {
             const el = document.getElementById('pauMascotContainer');
+            if (!el) return;
             el.classList.remove('pau-cheer');
             void el.offsetWidth;
             el.classList.add('pau-cheer');
-        }
-
-        let isMarathon = false;
-        function togglePauOutfit(e) {
-            if (e) e.stopPropagation();
-            isMarathon = !isMarathon;
-            document.getElementById('pauSvgClassic').classList.toggle('hidden', isMarathon);
-            document.getElementById('pauSvgMarathon').classList.toggle('hidden', !isMarathon);
-            document.getElementById('pauSpeechText').textContent = isMarathon ? '換上馬拉松 #188 戰袍！全力衝刺準時下班！🏃💨' : '換回經典揮手造型！看到手上的白肉球了嗎？🐾';
-            triggerMascotCheer();
         }
 
         /* 
@@ -2075,7 +3013,6 @@
         let pomoEndTime = null;
         let pomoAudioCtx = null;
 
-        // 初始化與解鎖瀏覽器音訊引擎
         function ensureAudioContext() {
             try {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -2093,13 +3030,11 @@
             }
         }
 
-        // 播放清脆鈴聲（mode = 'work' 為過關和弦鈴聲，'break' 為收心雙響鈴）
         function playPomodoroAlarm(mode = 'work') {
             const ctx = ensureAudioContext();
             if (!ctx) return;
 
             const now = ctx.currentTime;
-            // 專注完成：C5 - E5 - G5 - C6 (重複兩次)；休息結束：G5 - E5 - G5 - C6
             const melody = mode === 'work'
                 ? [
                     { f: 523.25, t: 0.0, d: 0.14 },
@@ -2184,7 +3119,6 @@
                 pomoTimerId = null;
                 pomoEndTime = null;
 
-                // 觸發完成提示音效與慶祝效果
                 playPomodoroAlarm(finishedMode);
                 confetti({ particleCount: 50, spread: 70 });
                 triggerMascotCheer();
@@ -2202,7 +3136,6 @@
         }
 
         function togglePomodoro() {
-            // 在使用者點擊「開始」時預先解鎖瀏覽器音效權限
             ensureAudioContext();
 
             const btn = document.getElementById('pomoStartBtn');
@@ -2223,7 +3156,6 @@
             showToast('🍅 番茄鐘已重設', 'info');
         }
 
-        // 當使用者從其他分頁切回來時，立即校正最新時間
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && pomoTimerId && pomoEndTime) {
                 tickPomodoro();
